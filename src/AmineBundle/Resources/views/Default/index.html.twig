@@ -1,0 +1,38 @@
+{# src/AmineBundle/Resources/views/Default/index.html.twig #}
+
+
+{% extends "AmineBundle::layout.html.twig" %}
+
+{% block title %}
+        Accueil - {{ parent() }}
+{% endblock %}
+
+{% block right %}
+	{{ parent() }}
+{% endblock %}	
+{% block body %}
+	 <h1>Annonces</h1>
+
+	  <hr>
+	{% block ocplatform_body %}
+			{% for flashMessage in app.session.flashbag.get('contact') %}
+				{{ flashMessage }}
+			{% endfor %}
+			<h2>Liste des annonces</h2>
+			<ul>
+				{% for advert in listAdverts %}
+				  <li>
+					<a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
+					  {{ advert.title }}
+					</a>
+					par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}
+				  </li>
+				{% else %}
+				  <li>Pas (encore !) d'annonces</li>
+				{% endfor %}
+			</ul>
+	{% endblock %}
+
+{% endblock %}
+
+

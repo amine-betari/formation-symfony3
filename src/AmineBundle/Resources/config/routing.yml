@@ -1,0 +1,6 @@
+amine_homepage:
+    path:     /
+    defaults: { _controller: AmineBundle:Default:index }
+amine_contact:
+    path: /nous-contacter
+    defaults: { _controller: AmineBundle:Default:contact }	
