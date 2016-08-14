@@ -41,7 +41,8 @@
 	<ul>
 	{% for application in listApplications %}
 		<li>M ou Mlle {{application.author}} a posté une candidature le {{application.date|date('d/m/Y') }} :
-		<strong>{{ application.content }}</strong>
+		<strong>{{ application.content }}</strong> 
+		<span><a href="{{ path('oc_platform_delete_application', {'id': application.id}) }}">Delete this candidature</a></span>
 		</li>
 	{% endfor %}
 	</ul>

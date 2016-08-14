@@ -10,6 +10,13 @@ oc_platform_category:
     defaults: 
         _controller: OCPlatformBundle:Advert:listadvertbycategory
 
+oc_platform_delete_application:
+    path: /delete-application/{id}		
+    defaults:
+        _controller: OCPlatformBundle:Advert:deleteapplication
+    requirements :
+        id: \d+
+
 oc_platform_home:
     path: /{page}
     defaults:

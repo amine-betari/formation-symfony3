@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(name="oc_advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\AdvertRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Advert
 {
@@ -70,7 +71,15 @@ class Advert
      */
     private $content;
 
-
+	/**
+	 * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+	 */
+	private $updatedAt;
+	
+	/**
+	 * @ORM\Column(name="nb_applications", type="integer")
+	 */
+	private $nbApplications = 0; 
 	
 	public function __construct() {
 		// par défaut, la date de l'annonce est la date d'aujourd'hui
@@ -299,4 +308,71 @@ class Advert
     {
         return $this->applications;
     }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Advert
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+	
+	
+	/**
+	 * @ORM\PreUpdate
+	 */
+	public function updateDate(){
+		//exit;
+		$this->setUpdatedAt(new \Datetime());
+	}
+
+    /**
+     * Set nbApplications
+     *
+     * @param integer $nbApplications
+     *
+     * @return Advert
+     */
+    public function setNbApplications($nbApplications)
+    {
+        $this->nbApplications = $nbApplications;
+
+        return $this;
+    }
+
+    /**
+     * Get nbApplications
+     *
+     * @return integer
+     */
+    public function getNbApplications()
+    {
+        return $this->nbApplications;
+    }
+	
+	
+	public function increaseApplication(){
+		$this->nbApplications++;
+	}
+	
+	
+	public function decreaseApplication(){
+		$this->nbApplications--;
+	}
 }

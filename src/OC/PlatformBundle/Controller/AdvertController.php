@@ -132,9 +132,15 @@ class AdvertController extends Controller
 		$application2->setAuthor('Chelhi');
 		$application2->setContent('Je ne suis plus motivée ');
 		
+		// Création d'une 3eme candidature 
+		$application3 = new Application();
+		$application3->setAuthor('Amine');
+		$application3->setContent('Lead Ded PHP');
+		
 		// liers les candidatures à l'annonce
 		$application1->setAdvert($advert);
 		$application2->setAdvert($advert);
+		$application3->setAdvert($advert);
 		
 		// Création de l'entité Image
 		$image = new Image;
@@ -165,7 +171,7 @@ class AdvertController extends Controller
 		
 		// Etape 2 : On flush tout ce qui a été persisté avant
 		
-		$em->persist($application1);$em->persist($application2);
+		$em->persist($application1);$em->persist($application2);$em->persist($application3);
 		
 		$em->flush();
 		
@@ -190,6 +196,9 @@ class AdvertController extends Controller
 		}
 		// Pour persister le changement dans la relation, il faut persister l'entité propriétaire
 		// Ici Advert est le propriétaire, donc inutile de la persister cat on l'a récupérée depuis Doctrine
+		
+		// test update name of Advert
+		$advert->setTitle('Recherche Expert Drupals');
 		$em->flush();
 		return $this->render('OCPlatformBundle:Advert:edit.html.twig', array('advert' => $advert ));
     }
@@ -254,4 +263,19 @@ class AdvertController extends Controller
 		return $this->render('OCPlatformBundle:Advert:list.html.twig', array('listAdverts' => $listAdverts, 'name' => $name));
 		
 	}
+	
+	
+	public function deleteapplicationAction($id){
+		$em = $this->get('doctrine')->getManager();
+		$application = $em->getRepository('OCPlatformBundle:Application')->find($id);
+		if($application === null){
+			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas. ");
+		}
+		// delete the Advert
+		$em->remove($application);
+		$em->flush();
+		$url = $this->get('router')->generate('oc_platform_home');
+		return $this->redirect($url);
+	}
+	
 }
