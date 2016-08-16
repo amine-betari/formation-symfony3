@@ -17,6 +17,10 @@ oc_platform_delete_application:
     requirements :
         id: \d+
 
+oc_platform_test:
+    path: /test
+    defaults: { _controller : OCPlatformBundle:Advert:test } 	
+
 oc_platform_home:
     path: /{page}
     defaults:

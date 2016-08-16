@@ -3,6 +3,7 @@
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -15,6 +16,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Advert
 {
 	
+	/**
+	 * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\AdvertSkill", mappedBy="advert")
+	 *
+	 */
+	private $advertskilles; 
 	/**
 	 * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
 	 */
@@ -81,11 +87,18 @@ class Advert
 	 */
 	private $nbApplications = 0; 
 	
+	/**
+	 * @Gedmo\Slug(fields={"title"})
+	 * @ORM\Column(name="slug", type="string", length=255)
+	 */
+	private $slug; 
+	
 	public function __construct() {
 		// par défaut, la date de l'annonce est la date d'aujourd'hui
 		$this->date = new \Datetime();
 		$this->categories = new ArrayCollection();
 		$this->applications = new ArrayCollection();
+		$this->advertskilles = new ArrayCollection();
 	}
     /**
      * Get id
@@ -375,4 +388,62 @@ class Advert
 	public function decreaseApplication(){
 		$this->nbApplications--;
 	}
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     *
+     * @return Advert
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Add advertskille
+     *
+     * @param \OC\PlatformBundle\Entity\AdvertSkill $advertskille
+     *
+     * @return Advert
+     */
+    public function addAdvertskille(\OC\PlatformBundle\Entity\AdvertSkill $advertskille)
+    {
+        $this->advertskilles[] = $advertskille;
+
+        return $this;
+    }
+
+    /**
+     * Remove advertskille
+     *
+     * @param \OC\PlatformBundle\Entity\AdvertSkill $advertskille
+     */
+    public function removeAdvertskille(\OC\PlatformBundle\Entity\AdvertSkill $advertskille)
+    {
+        $this->advertskilles->removeElement($advertskille);
+    }
+
+    /**
+     * Get advertskilles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAdvertskilles()
+    {
+        return $this->advertskilles;
+    }
 }

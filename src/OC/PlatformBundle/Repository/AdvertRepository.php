@@ -3,6 +3,7 @@
 namespace OC\PlatformBundle\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * AdvertRepository
@@ -12,17 +13,36 @@ use Doctrine\ORM\QueryBuilder;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function myFindAll(){
+	
+	public function getAdverts($page, $nbPerPage){
 		// Méthode 1 : en passant par l'entitymanager
 		// Dans un repo, $this->_entityName est le namespace de l'entité gérée ici
-		$queryBuilder = $this->_em->createQueryBuilder()->select('a')->from($this->_entityName,'a');
+		// $queryBuilder = $this->_em->createQueryBuilder()->select('a')->from($this->_entityName,'a');
 		// Méthode 2 : en passant par le raccourci, recommandé 
 		$queryBuilder = $this->createQueryBuilder('a');
+		// Jointure sur l'attribut image
+		$queryBuilder = $queryBuilder->leftJoin('a.image','img')->addSelect('img');
+		// Jointure sur l'attribut categories
+		$queryBuilder = $queryBuilder->leftJoin('a.categories','cat')->addSelect('cat');
+		// Jointure sur l'attribut advertskills
+		$queryBuilder = $queryBuilder->leftJoin('a.advertskilles','advskil')->addSelect('advskil');
+		// Jointure sur l'attribut skill de l'entité advert skill, Moins de 7 requtes avec le même code dans twig
+		$queryBuilder = $queryBuilder->leftJoin('advskil.skill','skill')->addSelect('skill');
+		$queryBuilder->orderBy('a.date','DESC');
 		// get Query à partir du QueryBuider
 		$query = $queryBuilder->getQuery();
+		// Pagination 
+		$query
+			// On définit l'annonce à partir de laquelle commencer la liste
+		->setFirstResult(($page-1) * $nbPerPage)
+			// Ainsi que le nombre d'annonce à afficher sur une page
+		->setMaxResults($nbPerPage);
+		// Pagination 
 		// get Result à partir de la query
-		$results = $query->getResult();
-		return $results;
+		// $results = $query->getResult();
+		// Les jointures se font simplement en utilisant les attributs existants de l'entité racine Advert
+		// return $results;
+		return new Paginator($query, true);
 	}
 	
 	
