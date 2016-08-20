@@ -1,12 +1,9 @@
 <?php
-
 // src/OC/PlatformBundle/Controller/AdvertController.php
-
-
 namespace OC\PlatformBundle\Controller;
 
-
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Form\AdvertType;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\AdvertSkill;
@@ -21,7 +18,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AdvertController extends Controller
 {
-	public function testAction(){
+	public function purgeAction($days)
+	{
+		$purge = $this->container->get('oc_platform.purger.advert');
+		$purge->purge($days);
+		return new Response('Adverts purgées');
+	}
+	
+	
+	public function testAction()
+	{
 		$advert = new Advert;
 		$advert->setTitle("Recherche développeur !");
 		$advert->setAuthor("Admin 2");
@@ -34,7 +40,7 @@ class AdvertController extends Controller
 	
     public function indexAction($page)
     {
-		if($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+		if ($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
 		
 		$url = $this->get('router')->generate(
 			'oc_platform_view', // name of route
@@ -54,7 +60,7 @@ class AdvertController extends Controller
 		// Pagination : On calcule le nbr totale de pages
 		$nbPages = ceil(count($listAdverts) / $nbPerPage);
 		// Pagination :si la page n'existe pas, on retourne un 404
-		if($page > $nbPages) throw new NotFoundHttpException("La page ".$page." n'existe pas.");
+		if ($page > $nbPages) throw new NotFoundHttpException("La page ".$page." n'existe pas.");
 
 		return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
 			'listAdverts' => $listAdverts,
@@ -64,8 +70,8 @@ class AdvertController extends Controller
     }
 
 
-    public function viewAction(Request $request) {
-
+    public function viewAction(Request $request) 
+	{
 	$id = $request->attributes->get('id');
 	// return new Response("Affichage de l'annonce d'id : ".$id.", avec le tag :". $tag);
     // return $this->get('templating')->renderResponse('OCPlatformBundle:Advert:view.html.twig', array('id' => $id, 'tag' => $tag));
@@ -114,16 +120,36 @@ class AdvertController extends Controller
 
 
     public function addAction(Request $request) {
-	
-		// On récupère l'EntityManager
-		$em = $this->get('doctrine')->getManager();
+		// On creér l'objet 
+		$advert = new Advert;
 		
-		if($request->isMethod('POST')) {
+		// On creér le formBuilder grâce au service form factory
+		//$formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $advert);
+		$form = $this->get('form.factory')->create(AdvertType::class, $advert);
+		
+		
+		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+			// On fait le lien Request <=> Form
+			// à partir du maintenant, la variable $advert contient les valeurs entrées dans le form par le visiteur
+					//$form->handleRequest($request);
+			// On vérifie que les valeurs entrées sont correctes
+			//if($form->isValid()) {
+			// On récupère l'EntityManager
+			$em = $this->get('doctrine')->getManager();	
+				
+			// Création de l'entité Image
+			$image = new Image;
+			$image->setUrl('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT3fWBugQz8xxR4ZhjMyox5CE3cjWsp9CgrOYp_H9EmEDb9hYCX');
+			$image->setAlt('Job de rêve');
+			// On lié  l'image à l'annonce
+			$advert->setImage($image);
+			$em->persist($advert);
+			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée');
 			return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
 		}
-		
-		return $this->render('OCPlatformBundle:Advert:add.html.twig');
+
+		return $this->render('OCPlatformBundle:Advert:add.html.twig', array('form' => $form->createView()));
 
 		// Manipuler un service
 		/*$antispam = $this->container->get('oc_platform.antispam');
@@ -193,19 +219,27 @@ class AdvertController extends Controller
     }
 
 	
-    public function editAction($id, Request $request) {
+    public function editAction($id, Request $request) 
+	{
 		$em = $this->get('Doctrine')->getManager();
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 		if($advert === null){
 			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas. ");
 		}
 		
-		if($request->isMethod('POST')){
+		// On creér le formBuilder grâce au service form factory
+		$form = $this->get('form.factory')->create(AdvertType::class, $advert);
+	
+		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()){
+			// On récupère l'EntityManager
+			$em = $this->get('doctrine')->getManager();	
+			//$em->persist($advert);
+			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
 			return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
 		}
 		
-		return $this->render('OCPlatformBundle:Advert:edit.html.twig', array('advert' => $advert ));
+		return $this->render('OCPlatformBundle:Advert:edit.html.twig', array('advert' => $advert , 'form' =>  $form->createView()));
 		
 		/*$listCategories = $em->getRepository('OCPlatformBundle:Category')->findAll();
 		foreach($listCategories as $category) {
@@ -216,7 +250,8 @@ class AdvertController extends Controller
     }
 	
 
-	public function deleteAction($id) {
+	public function deleteAction($id) 
+	{
 		$em = $this->get('doctrine')->getManager();
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 		if($advert === null){
@@ -249,7 +284,8 @@ class AdvertController extends Controller
 	}
 	
 
-	public function menuAction($limit) {
+	public function menuAction($limit)
+	{
 		// Get service Doctrine
 		$doctrine = $this->get('doctrine');
 		// Get EM
@@ -261,7 +297,8 @@ class AdvertController extends Controller
     }
 
 	
-	public function listadvertbycategoryAction($name){
+	public function listadvertbycategoryAction($name)
+	{
 		$em = $this->get('doctrine')->getManager();
 		$listAdverts = $em->getRepository('OCPlatformBundle:Advert')->getAdvertWithCategories($name);
 		if($listAdverts === null) {
@@ -273,7 +310,8 @@ class AdvertController extends Controller
 	}
 	
 	
-	public function deleteapplicationAction($id){
+	public function deleteapplicationAction($id)
+	{
 		$em = $this->get('doctrine')->getManager();
 		$application = $em->getRepository('OCPlatformBundle:Application')->find($id);
 		if($application === null){

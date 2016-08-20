@@ -14,7 +14,32 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
 	
-	public function getAdverts($page, $nbPerPage){
+	/**
+	* Liste des annonces sans candidature
+	* @param $days : int
+	*/
+	public function getAdvertsWithoutCandidatureBeforeDays($days)
+	{
+		$queryBuilder = $this->createQueryBuilder('a');
+		//$queryBuilder = $queryBuilder->leftjoin('a.applications','app')->addSelect('app');
+		$queryBuilder = $queryBuilder->where('a.applications IS EMPTY');
+
+		$queryBuilder = $queryBuilder->andWhere('a.updatedAt <= :days');
+		//$queryBuilder = $queryBuilder->setParameter( 'days' , new \DateTime('+'.$days.' day'));
+		$queryBuilder = $queryBuilder->setParameter( 'days' , new \DateTime($days.' days ago'));
+		
+		
+		return $queryBuilder->getQuery()->getResult();
+	}
+	
+	
+	/**
+	 * getAdverts selon pagination
+	 * @param : $page : string
+	 * @param : $nbPerPage  : int
+	 */
+	public function getAdverts($page, $nbPerPage)
+	{
 		// Méthode 1 : en passant par l'entitymanager
 		// Dans un repo, $this->_entityName est le namespace de l'entité gérée ici
 		// $queryBuilder = $this->_em->createQueryBuilder()->select('a')->from($this->_entityName,'a');

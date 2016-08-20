@@ -17,3 +17,7 @@ services:
         arguments:
             - "@oc_platform.email.application_mailer"
 #        tags: [name: doctrine.event_listner, event: postPersist]
+    oc_platform.purger.advert:
+        class: OC\PlatformBundle\Purge\AdvertArchive
+        arguments:
+            - "@doctrine.orm.default_entity_manager"
