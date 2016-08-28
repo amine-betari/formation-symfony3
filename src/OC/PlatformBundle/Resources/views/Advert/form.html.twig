@@ -8,10 +8,11 @@
 	
 	{# Les erreurs générales du formulaire. #}
 	{{ form_errors(form) }}
-	
-	{# Génération du label + error + widget pour un champ. #}
-    {{ form_row(form.date) }}
-	
+
+	{% if form.date is defined %}
+		{# Génération du label + error + widget pour un champ. #}
+		{{ form_row(form.date) }}
+	{% endif %}
 	{# Génération manuelle et éclatée : #}
 	  <div class="form-group">
 		{# Génération du label. #}
@@ -34,7 +35,17 @@
 		</div>
 	  </div>
 		{{ form_row(form.author) }}
-		{{ form_row(form.published) }}
+		{% if form.pubished is defined %}
+			{{ form_row(form.published) }}
+		{% endif %}
+		{{ form_row(form.image) }}
+		
+		<div class="well">
+		
+			{# <!--<ul class="tags" data-prototype="{{ form_widget(form.categories.vars.prototype)|e('html_attr') }}"> --> #}
+		
+			</ul>
+		</div>
 
 		{# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
 		{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
@@ -47,3 +58,70 @@
 		{# Fermeture de la balise <form> du formulaire HTML #}
 		{{ form_end(form) }}
 </div>
+{# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
+   mais si vous l'avez en local, changez simplement l'adresse. #}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+{# Voici le script en question : #}
+<script type="text/javascript">
+ 
+	var $collectionHolder;
+
+	// setup an "add a tag" link
+	var $addTagLink = $('<a href="#" class="add_tag_link">Add a skill</a>');
+	var $newLinkLi = $('<li></li>').append($addTagLink);
+
+	jQuery(document).ready(function() {
+		// Get the ul that holds the collection of tags
+		$collectionHolder = $('ul.tags');
+
+		// add the "add a tag" anchor and li to the tags ul
+		$collectionHolder.append($newLinkLi);
+		$collectionHolder.find('li').each(function() {
+			addCategoryFormDeleteLink($(this));
+		});
+
+		// count the current form inputs we have (e.g. 2), use that as the new
+		// index when inserting a new item (e.g. 2)
+		$collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+		$addTagLink.on('click', function(e) {
+			// prevent the link from creating a "#" on the URL
+			e.preventDefault();
+
+			// add a new tag form (see next code block)
+			addCategoryForm($collectionHolder, $newLinkLi);
+		});
+	});
+	function addCategoryForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+		var prototype = $collectionHolder.data('prototype');
+
+		// get the new index
+		var index = $collectionHolder.data('index');
+
+		// Replace '__name__' in the prototype's HTML to
+		// instead be a number based on how many items we have
+		var newForm = prototype.replace(/__name__/g, index);
+
+		// increase the index with one for the next item
+		$collectionHolder.data('index', index + 1);
+
+		// Display the form in the page in an li, before the "Add a tag" link li
+		var $newFormLi = $('<li></li>').append(newForm);
+		$newLinkLi.before($newFormLi);
+		addCategoryFormDeleteLink($newFormLi);
+	}
+	function addCategoryFormDeleteLink($tagFormLi) {
+		var $removeFormA = $('<a href="#"> Delete this skill</a>');
+		$tagFormLi.append($removeFormA);
+
+		$removeFormA.on('click', function(e) {
+			// prevent the link from creating a "#" on the URL
+			e.preventDefault();
+
+			// remove the li for the tag form
+			$tagFormLi.remove();
+		});
+	}
+</script>

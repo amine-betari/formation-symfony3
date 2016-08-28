@@ -4,6 +4,7 @@ namespace OC\PlatformBundle\Controller;
 
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Form\AdvertType;
+use OC\PlatformBundle\Form\AdvertEditType;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\AdvertSkill;
@@ -30,12 +31,24 @@ class AdvertController extends Controller
 	{
 		$advert = new Advert;
 		$advert->setTitle("Recherche développeur !");
-		$advert->setAuthor("Admin 2");
+		$advert->setAuthor("A");
 		$advert->setContent("Recherche développeur !");
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($advert);
-		$em->flush(); // c'est à ce moment qu'est généré le slug
-		return new Response('Slug généré : '.$advert->getSlug());
+		
+		// On récupère le service validator
+		$validator = $this->get('validator');
+		
+		// On déclenche la validation sur notre objet
+		$listErrors = $validator->validate($advert);
+		
+		if(count($listErrors) > 0) {
+			return new Response((string) $listErrors);
+		} else {
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($advert);
+			$em->flush(); // c'est à ce moment qu'est généré le slug
+			return new Response('Slug généré : '.$advert->getSlug());
+		}
+		
 	}
 	
     public function indexAction($page)
@@ -119,7 +132,8 @@ class AdvertController extends Controller
     }
 
 
-    public function addAction(Request $request) {
+    public function addAction(Request $request) 
+	{
 		// On creér l'objet 
 		$advert = new Advert;
 		
@@ -138,11 +152,12 @@ class AdvertController extends Controller
 			$em = $this->get('doctrine')->getManager();	
 				
 			// Création de l'entité Image
-			$image = new Image;
+			/*$image = new Image;
 			$image->setUrl('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT3fWBugQz8xxR4ZhjMyox5CE3cjWsp9CgrOYp_H9EmEDb9hYCX');
 			$image->setAlt('Job de rêve');
 			// On lié  l'image à l'annonce
-			$advert->setImage($image);
+			$advert->setImage($image);*/
+			
 			$em->persist($advert);
 			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée');
@@ -228,7 +243,7 @@ class AdvertController extends Controller
 		}
 		
 		// On creér le formBuilder grâce au service form factory
-		$form = $this->get('form.factory')->create(AdvertType::class, $advert);
+		$form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 	
 		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()){
 			// On récupère l'EntityManager
@@ -250,7 +265,7 @@ class AdvertController extends Controller
     }
 	
 
-	public function deleteAction($id) 
+	public function deleteAction($id, Request $request) 
 	{
 		$em = $this->get('doctrine')->getManager();
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
@@ -258,10 +273,23 @@ class AdvertController extends Controller
 			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas. ");
 		}
 		
-		// on boucle sur les catégories de l'annonce pour les supprimer
-		foreach($advert->getCategories() as $category) {
-			$advert->removeCategory($category);
+		// On créer un formulaire vide, qui ne contiendra que le champ CSRF
+		// Cela permet de protéger la supression d'annonce contre cette faille
+		$form = $this->get('form.factory')->create();
+		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+			$em->remove($advert);
+			$em->flush();
+			$request->getSession()->getFlashBag()->add('info', 'L\'annonce a bien été supprimé. ');
+			return $this->redirectToRoute('oc_platform_home');
 		}
+		return $this->render('OCPlatformBundle:Advert:delete.html.twig', array(
+			'advert' => $advert,
+			'form'   => $form->createView(),
+		));
+		// on boucle sur les catégories de l'annonce pour les supprimer
+		/*foreach($advert->getCategories() as $category) {
+			$advert->removeCategory($category);
+		}*/
 		
 		// delete the applications with  avdert
 		/*$listApplications = $em->getRepository('OCPlatformBundle:Application')->findBy(array('advert' => $advert));
@@ -275,12 +303,6 @@ class AdvertController extends Controller
 		foreach($listAdvertSkill as $advertSkill) {
 			$em->remove($advertSkill);
 		}*/
-		
-		$em->remove($advert);
-		// Pour persister le changement dans la relation, il faut persister l'entité propriétaire
-		// Ici Advert est le propriétaire, donc inutile de la persister cat on l'a récupérée depuis Doctrine
-		$em->flush();
-		return $this->render('OCPlatformBundle:Advert:delete.html.twig');
 	}
 	
 

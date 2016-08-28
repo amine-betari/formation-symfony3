@@ -5,6 +5,11 @@ namespace OC\PlatformBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
+// Validator
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use OC\PlatformBundle\Validator\Antiflood;
 
 /**
  * Advert
@@ -12,17 +17,18 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="oc_advert")
  * @ORM\Entity(repositoryClass="OC\PlatformBundle\Repository\AdvertRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="title", message="Une annonce existe déjà avec ce titre.")
  */
 class Advert
 {
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\AdvertSkill", mappedBy="advert")
+	 * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\AdvertSkill", mappedBy="advert", orphanRemoval=true, cascade={"all"} )
 	 *
 	 */
 	private $advertskilles; 
 	/**
-	 * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert")
+	 * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\Application", mappedBy="advert", orphanRemoval=true, cascade={"all"} )
 	 */
 	private $applications;
 	/**
@@ -31,7 +37,8 @@ class Advert
 	 */
 	private $categories; 
 	/**
-	 * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
+	 * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
+	 * @Assert\Valid()
 	 */
 	private $image;
     /**
@@ -53,13 +60,15 @@ class Advert
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
+	 * @Assert\DateTime()
      */
     private $date;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=255, unique=true)
+	 * @Assert\Length(min=10, minMessage="Le titre doit faire au moins {{ limit }} caractères.")
      */
     private $title;
 
@@ -67,6 +76,7 @@ class Advert
      * @var string
      *
      * @ORM\Column(name="author", type="string", length=255)
+	 * @Assert\Length(min=5)
      */
     private $author;
 
@@ -74,6 +84,8 @@ class Advert
      * @var string
      *
      * @ORM\Column(name="content", type="string", length=255)
+	 * @Assert\NotBlank()
+	 * @Antiflood()
      */
     private $content;
 
@@ -94,7 +106,7 @@ class Advert
 	private $slug; 
 	
 	public function __construct() {
-		// par d�faut, la date de l'annonce est la date d'aujourd'hui
+		// par défaut, la date de l'annonce est la date d'aujourd'hui
 		$this->date = new \Datetime();
 		$this->categories = new ArrayCollection();
 		$this->applications = new ArrayCollection();
@@ -446,4 +458,23 @@ class Advert
     {
         return $this->advertskilles;
     }
+	
+	
+	/**
+	 * @Assert\Callback
+	 */
+	public function isContentValid(ExecutionContextInterface $context) 
+	{
+		$forbiddenWords = array('démotivation', 'abandon');
+
+		// On vérifie que le contenu ne contient pas l'un des mots
+		if (preg_match('#'.implode('|', $forbiddenWords).'#', $this->getContent())) {
+		  // La règle est violée, on définit l'erreur
+		  $context
+			->buildViolation('Contenu invalide car il contient un mot interdit.') // message
+			->atPath('content')                                                   // attribut de l'objet qui est violé
+			->addViolation() // ceci déclenche l'erreur, ne l'oubliez pas
+		  ;
+		}
+	}
 }

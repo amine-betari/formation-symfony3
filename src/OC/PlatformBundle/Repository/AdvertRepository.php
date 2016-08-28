@@ -22,9 +22,10 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
 	{
 		$queryBuilder = $this->createQueryBuilder('a');
 		//$queryBuilder = $queryBuilder->leftjoin('a.applications','app')->addSelect('app');
-		$queryBuilder = $queryBuilder->where('a.applications IS EMPTY');
-
-		$queryBuilder = $queryBuilder->andWhere('a.updatedAt <= :days');
+		
+		$queryBuilder = $queryBuilder->where('a.updatedAt <= :days');
+		$queryBuilder = $queryBuilder->orWhere('a.updatedAt IS NULL AND a.date <= :days');
+		$queryBuilder = $queryBuilder->andwhere('a.applications IS EMPTY');
 		//$queryBuilder = $queryBuilder->setParameter( 'days' , new \DateTime('+'.$days.' day'));
 		$queryBuilder = $queryBuilder->setParameter( 'days' , new \DateTime($days.' days ago'));
 		

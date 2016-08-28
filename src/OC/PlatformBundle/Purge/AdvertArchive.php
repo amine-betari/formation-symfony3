@@ -32,9 +32,10 @@ class AdvertArchive
 		$listAdverts = $repository->getAdvertsWithoutCandidatureBeforeDays($days);
 		// boucler et suprpimer 
 		foreach($listAdverts as $advert) {
-			$em->remove($advert);
+		//echo $advert->getTitle(); echo 'dd';echo $advert->getId(); echo '<br />';
+		 $em->remove($advert);
 		}
-		$em->flush();
+		 $em->flush();
 
 	}
 }
