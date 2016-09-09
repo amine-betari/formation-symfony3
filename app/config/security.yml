@@ -1,24 +1,56 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        OC\UserBundle\Entity\User: sha512
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_AUTEUR, ROLE_MODERATEUR]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
+        main: 
+#            entity: 
+#                class: OC\UserBundle\Entity\User
+#                property: username
+            id: fos_user.user_provider.username_email
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    user:  {password: userpass, roles: ['ROLE_USER']}
+                    admin: {password: adminpass, roles: ['ROLE_ADMIN']}
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+#        main_login:
+#            pattern: ^/login$
+#            anonymous: true
         main:
-            anonymous: ~
+            pattern: ^/
+            # oauth:
+                # check_path: /connect_check
+                # provider: fos_userbundle
+                # ressource_owners:
+                    # facebook: "/login/check-facebook"
+                # oauth_user_provider:
+                    # service: app.provider.oauth
+            anonymous: true
+            provider: main
+            form_login:
+                login_path: fos_user_security_login
+                check_path: fos_user_security_check
+            logout:
+                path: fos_user_security_logout
+                target: /		
+            remember_me:
+                secret: %secret%
             # activate different ways to authenticate
-
             # http_basic: ~
             # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    access_control:

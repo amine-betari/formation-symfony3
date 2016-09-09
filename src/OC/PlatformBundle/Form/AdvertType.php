@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use OC\PlatformBundle\Repository\CategoryRepository;
-
+use OC\PlatformBundle\Form\CkeditorType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
@@ -39,7 +39,8 @@ class AdvertType extends AbstractType
 					]
 				] )
 			  ->add('title',     TextType::class)
-			  ->add('content',   TextareaType::class)
+			  //->add('content',   TextareaType::class)
+			  ->add('content',   CkeditorType::class, array('attr' => array('class' => 'ckeditor')))
 			  ->add('author',    TextType::class)
 			  //->add('published', CheckboxType::class, array('required' => false))
 			  ->add('image', ImageType::class) // ImageType est un formulaire

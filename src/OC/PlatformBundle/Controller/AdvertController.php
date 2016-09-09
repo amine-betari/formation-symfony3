@@ -2,6 +2,8 @@
 // src/OC/PlatformBundle/Controller/AdvertController.php
 namespace OC\PlatformBundle\Controller;
 
+use OC\PlatformBundle\Event\PlatformEvents;
+use OC\PlatformBundle\Event\MessagePostEvent;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Form\AdvertType;
 use OC\PlatformBundle\Form\AdvertEditType;
@@ -15,10 +17,19 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use OC\UserBundle\Entity\User;
+
 
 
 class AdvertController extends Controller
 {
+	public function translationAction($name) 
+	{
+		return $this->render('OCPlatformBundle:Advert:translation.html.twig', array(
+			'name' => $name
+		));
+	}
 	public function purgeAction($days)
 	{
 		$purge = $this->container->get('oc_platform.purger.advert');
@@ -27,7 +38,7 @@ class AdvertController extends Controller
 	}
 	
 	
-	public function testAction()
+	public function testAction($id)
 	{
 		$advert = new Advert;
 		$advert->setTitle("Recherche développeur !");
@@ -53,7 +64,7 @@ class AdvertController extends Controller
 	
     public function indexAction($page)
     {
-		if ($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+		//if ($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
 		
 		$url = $this->get('router')->generate(
 			'oc_platform_view', // name of route
@@ -83,8 +94,12 @@ class AdvertController extends Controller
     }
 
 
-    public function viewAction(Request $request) 
+    public function viewAction(Request $request, Advert $advert) 
 	{
+		//echo $advert->getId(); exit;
+		// Grâce à cette signature Advert $advert, nous venons d'économiser :
+		// $em->find() ainsi que le if (null !== $advert)
+		// On peut faire tout simplement $advert->getID();
 	$id = $request->attributes->get('id');
 	// return new Response("Affichage de l'annonce d'id : ".$id.", avec le tag :". $tag);
     // return $this->get('templating')->renderResponse('OCPlatformBundle:Advert:view.html.twig', array('id' => $id, 'tag' => $tag));
@@ -134,6 +149,10 @@ class AdvertController extends Controller
 
     public function addAction(Request $request) 
 	{
+	
+		// if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+			// throw new AccessDeniedException('Accès limité aux auteurs.');
+		// }
 		// On creér l'objet 
 		$advert = new Advert;
 		
@@ -143,13 +162,24 @@ class AdvertController extends Controller
 		
 		
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+		
+			// On récupère l'EntityManager
+			$em = $this->get('doctrine')->getManager();	
+			
+			// $user = $em->getRepository('OCUserBundle:User')->findBy(array('username' => 'soukaina'));
+			
+			
+			$event = new MessagePostEvent($advert->getContent(), $this->getUser());
+
+			// on déclenche l'événement
+			$this->get('event_dispatcher')->dispatch(PlatformEvents::POST_MESSAGE, $event);
+			
 			// On fait le lien Request <=> Form
 			// à partir du maintenant, la variable $advert contient les valeurs entrées dans le form par le visiteur
 					//$form->handleRequest($request);
 			// On vérifie que les valeurs entrées sont correctes
 			//if($form->isValid()) {
-			// On récupère l'EntityManager
-			$em = $this->get('doctrine')->getManager();	
+			
 				
 			// Création de l'entité Image
 			/*$image = new Image;
@@ -157,6 +187,11 @@ class AdvertController extends Controller
 			$image->setAlt('Job de rêve');
 			// On lié  l'image à l'annonce
 			$advert->setImage($image);*/
+			
+			// GE
+				// On récupère ce qui a été modifié par le ou les listeners, ici le message
+			// GE
+			$advert->setContent($event->getMessage());
 			
 			$em->persist($advert);
 			$em->flush();

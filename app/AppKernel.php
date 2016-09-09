@@ -20,7 +20,9 @@ class AppKernel extends Kernel
             new AmineBundle\AmineBundle(),
 			//new Doctrine\Bundle\FixturesBundles\DoctrineFixturesBundle(),
 		    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-
+            new OC\UserBundle\OCUserBundle(),
+			new FOS\UserBundle\FOSUserBundle(),
+			// new HWI\Bundle\OAuthBundle\HWIOAuthBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

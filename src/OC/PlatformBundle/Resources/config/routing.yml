@@ -25,8 +25,10 @@ oc_platform_purge:
         days: \d+
 
 oc_platform_test:
-    path: /test
+    path: /test/{id}
     defaults: { _controller : OCPlatformBundle:Advert:test } 	
+    requirements:
+        id: \d+
 
 oc_platform_home:
     path: /{page}

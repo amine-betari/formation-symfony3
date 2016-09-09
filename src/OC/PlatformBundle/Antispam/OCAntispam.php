@@ -9,14 +9,19 @@ class OCAntispam
 {
 
 	private $mailer;
-        private $locale;
+    private $locale;
 	private $minLength;
 
-	public function __construct(\Swift_Mailer $mailer, $locale,  $minLength)
+	public function __construct(\Swift_Mailer $mailer, $minLength)
 	{
 		$this->mailer = $mailer;
-		$this->locale = $locale;
+		//$this->locale = $locale;
 		$this->minLength = (int) $minLength;
+	}
+	
+	public function setLocale($locale)
+	{
+		$this->locale = $locale;
 	}
 
 	/**

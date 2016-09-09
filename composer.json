@@ -30,7 +30,9 @@
         "incenteev/composer-parameter-handler": "^2.0",
 		"doctrine/data-fixtures": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "stof/doctrine-extensions-bundle": "^1.2.2"
+        "stof/doctrine-extensions-bundle": "^1.2.2",
+		"friendsofsymfony/user-bundle": "dev-master",
+		"hwi/oauth-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

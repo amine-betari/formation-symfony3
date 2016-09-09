@@ -9,8 +9,17 @@
 {% block right %}
 		<h3>Les annonces depuis le bundle PL</h3>
         <ul class="nav nav-pills nav-stacked">
-          <li><a href="{{ path('amine_homepage') }}">Home</a></li>
-          <li><a href="{{ path('oc_platform_add') }}">Ajouter une annonce</a></li>
+          <li><a href="{{ path('amine_homepage') }}">{{ "Home"|trans }}</a></li>
+          <li><a href="{{ path('oc_platform_add') }}">{{ "add.advert"|trans }}</a></li>
+		  {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+				<!--Connecté en tant que {{ app.user.username }}-->
+			<li><a href="{{ path('fos_user_security_logout') }}">{{ "Déconnexion"|trans }}</a></li>
+		  {% else %}
+		    <li><a href="{{ path('fos_user_security_login') }}">{{ "Connexion"|trans }}</a></i>
+			<li><a href="{{ path('fos_user_registration_register') }}">{{ "Register"|trans }}</a></i>
+			<!--<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>-->
+		  {% endif %}
+		  
         </ul>
 {% endblock %}	
 	
