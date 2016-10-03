@@ -12,11 +12,15 @@
     {# On charge le CSS de bootstrap depuis le site directement #}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="{{ asset('bundles/ocplatform/plugins/bootstrap-datepicker-master/dist/css/bootstrap-datepicker.css') }}" />
-  {% endblock %}
+	{#{% stylesheets  filter='cssrewrite, scssphp'
+		'bundles/ocplatform/plugins/bootstrap-datepicker-master/dist/css/bootstrap-datepicker.css' %}
+		<link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+	{% endstylesheets %} #}
+  {% endblock %} }
 </head>
 
 <body>
-<script>
+<!--<script>
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '1253587921382454',
@@ -32,7 +36,7 @@
      js.src = "//connect.facebook.net/en_US/sdk.js";
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
-</script>
+</script>-->
   <div class="container">
     <div id="header" class="jumbotron">
      <center> <h1>Plateforme d'annonces Amine</h1> </center>
@@ -68,6 +72,10 @@
     {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	{# {% javascripts filter="jsqueeze"
+		'bundles/ocplatform/plugins/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.js' %}
+		<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %} #}
 	<script src="{{ asset('bundles/ocplatform/plugins/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.js') }}"></script>
   {% endblock %}
 

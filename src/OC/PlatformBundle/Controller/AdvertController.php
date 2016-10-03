@@ -18,12 +18,23 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use OC\UserBundle\Entity\User;
+//use OC\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 
 
 
 class AdvertController extends Controller
 {
+	/**
+	 * @ParamConverter("json")
+	 */
+	public function ParamConverterAction($json)
+	{
+		return new Response(print_r($json, true));
+	}
+	
+	
 	public function translationAction($name) 
 	{
 		return $this->render('OCPlatformBundle:Advert:translation.html.twig', array(
@@ -150,9 +161,9 @@ class AdvertController extends Controller
     public function addAction(Request $request) 
 	{
 	
-		// if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
-			// throw new AccessDeniedException('Accès limité aux auteurs.');
-		// }
+		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+			throw new AccessDeniedException('Accès limité aux auteurs.');
+		}
 		// On creér l'objet 
 		$advert = new Advert;
 		
@@ -271,6 +282,10 @@ class AdvertController extends Controller
 	
     public function editAction($id, Request $request) 
 	{
+		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+			throw new AccessDeniedException('Accès limité aux auteurs.');
+		}
+		
 		$em = $this->get('Doctrine')->getManager();
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 		if($advert === null){
@@ -302,6 +317,10 @@ class AdvertController extends Controller
 
 	public function deleteAction($id, Request $request) 
 	{
+		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+			throw new AccessDeniedException('Accès limité aux auteurs.');
+		}
+		
 		$em = $this->get('doctrine')->getManager();
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 		if($advert === null){

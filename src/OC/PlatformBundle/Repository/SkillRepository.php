@@ -2,6 +2,9 @@
 
 namespace OC\PlatformBundle\Repository;
 
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * SkillRepository
  *
@@ -10,4 +13,16 @@ namespace OC\PlatformBundle\Repository;
  */
 class SkillRepository extends \Doctrine\ORM\EntityRepository
 {
+public function getSkills($page, $nbPerPage)
+	{
+		$queryBuilder = $this->createQueryBuilder('s');
+		$query = $queryBuilder->getQuery();
+		// Pagination 
+		$query
+			// On définit l'annonce à partir de laquelle commencer la liste
+		->setFirstResult(($page-1) * $nbPerPage)
+			// Ainsi que le nombre d'annonce à afficher sur une page
+		->setMaxResults($nbPerPage);
+		return new Paginator($query, true);
+	}
 }

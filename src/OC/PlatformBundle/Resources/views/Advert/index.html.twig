@@ -9,9 +9,9 @@
 {% block ocplatform_body %}
 	<h2>Liste des annonces</h2>
 
-	<ul>
+	<ul style="clear:both; overflow:hidden">
     {% for advert in listAdverts %}
-      <li style="height: 150px;">
+      <li style="height: 150px; width: 72%; float:left;">
 	  <p style="width21%; float:left; padding-right:12px;">
 		{% if advert.image is not null %}
 			<!--<img style="vertical-align:text-top" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" />-->

@@ -9,8 +9,13 @@
 {% block right %}
 		<h3>Les annonces depuis le bundle PL</h3>
         <ul class="nav nav-pills nav-stacked">
+			
           <li><a href="{{ path('amine_homepage') }}">{{ "Home"|trans }}</a></li>
-          <li><a href="{{ path('oc_platform_add') }}">{{ "add.advert"|trans }}</a></li>
+		  {% if is_granted("ROLE_ADMIN") %}
+			<li><a href="{{ path('oc_platform_add') }}">{{ "add.advert"|trans }}</a></li>
+			<li><a href="{{ path('oc_platform_add_skill') }}">{{ "Add Skill"|trans }}</a></li>
+			<li><a href="{{ path('oc_platform_list_skill') }}">{{ "List Skills"|trans }}</a></li>
+		  {% endif %}
 		  {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 				<!--Connecté en tant que {{ app.user.username }}-->
 			<li><a href="{{ path('fos_user_security_logout') }}">{{ "Déconnexion"|trans }}</a></li>

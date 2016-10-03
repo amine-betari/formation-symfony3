@@ -1,0 +1,33 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/index.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %} 
+	Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+	<h2>Liste des compétences</h2>
+
+	<ul style="clear:both; overflow:hidden">
+    {% for skill in listSkills %}
+      <li>
+	  
+	   <p> 
+			<a href="{{ path('oc_platform_edit_skill', {'id': skill.id}) }}">
+				{{ skill.name }}
+			</a>
+		</p>
+      </li>
+    {% else %}
+      <li>Pas de compétences</li>
+    {% endfor %}
+	</ul>
+	<ul class="pagination">
+		{% for p in range(1, nbPages) %}
+			<li{% if p == page %} class="active"{% endif %}>
+				<a href="{{ path('oc_platform_list_skill', {'page': p}) }}">{{ p }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

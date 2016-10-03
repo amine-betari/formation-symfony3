@@ -1,0 +1,21 @@
+{# src/OC/PlatformBundle/Resources/views/Skill/add.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+   Ajouter une compétence - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+
+  <h2>Ajouter une compétence</h2>
+
+  {{ include("OCPlatformBundle:Skill:form.html.twig") }}
+
+
+  <p>
+   Vous etes enrain d'ajouter  une annonce déjà.
+  </p>
+
+
+{% endblock %}

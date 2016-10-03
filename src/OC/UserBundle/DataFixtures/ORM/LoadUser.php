@@ -10,13 +10,17 @@ class LoadUser implements FixtureInterface
 {
   public function load(ObjectManager $manager)
   { 
-	$listNames = array('Alexandre', 'Marine', 'Anna');
+  
+	// A revoir le sousci des mot de passes
+	$listNames = array('amine-betari');
 	foreach ($listNames as $name) {
 	  $user = new User;
-          $user->setUsername($name);
+      $user->setUsername($name);
+	  $user->setEnabled(true);
   	  $user->setPassword($name);
-  	  $user->setSalt('');
- 	  $user->setRoles(array('ROLE_USER'));
+  	  //$user->setSalt('');
+	  $user->setEmail('admin@hotmail.com');
+ 	  $user->setRoles(array('ROLE_ADMIN'));
 	  $manager->persist($user);
 	}
 	$manager->flush();

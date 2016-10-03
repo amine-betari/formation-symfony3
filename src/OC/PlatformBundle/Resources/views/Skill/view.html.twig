@@ -1,0 +1,23 @@
+{# src/OC/PlatformBundle/Resources/view/Skill/view.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Lecture d'une compétence - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+
+  <h2>{{ skill.name }}</h2>
+  <p>
+    <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la liste
+    </a>
+	<a href="{{ path('oc_platform_edit_skill', {'id': skill.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-edit"></i>
+      Modifier la compétence
+    </a>
+  </p>
+
+{% endblock %}
