@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use OC\PlatformBundle\Repository\CategoryRepository;
+//use Symfony\Component\Form\Extension\Core\Type\SkillType;
 use OC\PlatformBundle\Form\CkeditorType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -54,6 +55,13 @@ class AdvertType extends AbstractType
 				 'class'        => 'OCPlatformBundle:Category',
 				 'choice_label' => 'name',
 				 'multiple'     => true,
+			   ))
+			   ->add('Skill', EntityType::class, array(
+				'class'			=> 'OCPlatformBundle:Skill',
+				'choice_label'      => 'name',
+				'multiple'      => true,
+				'expanded'      => true,
+				//'property_path' => false,
 			   ))
 			  // ->add('categories', EntityType::class, array(
 				// 'class'         => 'OCPlatformBundle:Category',

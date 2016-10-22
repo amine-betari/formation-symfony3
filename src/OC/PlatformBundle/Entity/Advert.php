@@ -21,7 +21,7 @@ use OC\PlatformBundle\Validator\Antiflood;
  */
 class Advert
 {
-	
+	private $skills;
 	/**
 	 * @ORM\OneToMany(targetEntity="OC\PlatformBundle\Entity\AdvertSkill", mappedBy="advert", orphanRemoval=true, cascade={"all"} )
 	 *
@@ -108,6 +108,8 @@ class Advert
 	public function __construct() {
 		// par défaut, la date de l'annonce est la date d'aujourd'hui
 		$this->date = new \Datetime();
+		$this->skills = new ArrayCollection();
+		
 		$this->categories = new ArrayCollection();
 		$this->applications = new ArrayCollection();
 		$this->advertskilles = new ArrayCollection();
@@ -425,6 +427,30 @@ class Advert
         return $this->slug;
     }
 
+	
+	public function getSkill()
+    {
+        $skills = new ArrayCollection();
+        
+        foreach($this->advertskilles as $as)
+        {
+            $skills[] = $as->getSkill();
+        }
+        return $skills;
+    }
+	
+	
+    public function setSkill($skills)
+    {
+        foreach($skills as $s)
+        {
+            $advertskilles = new AdvertSkill();
+            $advertskilles->setAdvert($this);
+            $advertskilles->setSkill($s);
+			$advertskilles->setLevel('Expert');
+            $this->addAdvertskille($advertskilles);
+        }
+    }
     /**
      * Add advertskille
      *

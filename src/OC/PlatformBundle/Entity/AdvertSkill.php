@@ -35,7 +35,7 @@ class AdvertSkill
 	private $advert;
 
 	/**
-	 * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Skill")
+	 * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Skill", inversedBy="advertskilles")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $skill; 
@@ -98,30 +98,6 @@ class AdvertSkill
     }
 
     /**
-     * Set slill
-     *
-     * @param \OC\PlatformBundle\Entity\Skill $slill
-     *
-     * @return AdvertSkill
-     */
-    public function setSlill(\OC\PlatformBundle\Entity\Skill $slill)
-    {
-        $this->slill = $slill;
-
-        return $this;
-    }
-
-    /**
-     * Get slill
-     *
-     * @return \OC\PlatformBundle\Entity\Skill
-     */
-    public function getSlill()
-    {
-        return $this->slill;
-    }
-
-    /**
      * Set skill
      *
      * @param \OC\PlatformBundle\Entity\Skill $skill
@@ -144,4 +120,5 @@ class AdvertSkill
     {
         return $this->skill;
     }
+
 }

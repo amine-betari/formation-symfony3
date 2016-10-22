@@ -173,7 +173,6 @@ class AdvertController extends Controller
 		
 		
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-		
 			// On récupère l'EntityManager
 			$em = $this->get('doctrine')->getManager();	
 			
@@ -295,7 +294,7 @@ class AdvertController extends Controller
 		// On creér le formBuilder grâce au service form factory
 		$form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 	
-		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()){
+		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 			// On récupère l'EntityManager
 			$em = $this->get('doctrine')->getManager();	
 			//$em->persist($advert);
