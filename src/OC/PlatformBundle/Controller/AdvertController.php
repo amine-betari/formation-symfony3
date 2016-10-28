@@ -159,7 +159,7 @@ class AdvertController extends Controller
 
 
     public function addAction(Request $request) 
-	{
+    {
 	
 		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
 			throw new AccessDeniedException('Accès limité aux auteurs.');
@@ -171,13 +171,13 @@ class AdvertController extends Controller
 		//$formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $advert);
 		$form = $this->get('form.factory')->create(AdvertType::class, $advert);
 		
-		
+		//exit(\Doctrine\Common\Util\Debug::dump($advert->getId()));
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+			// exit(\Doctrine\Common\Util\Debug::dump($form->getData()));
 			// On récupère l'EntityManager
 			$em = $this->get('doctrine')->getManager();	
 			
 			// $user = $em->getRepository('OCUserBundle:User')->findBy(array('username' => 'soukaina'));
-			
 			
 			$event = new MessagePostEvent($advert->getContent(), $this->getUser());
 
@@ -202,7 +202,16 @@ class AdvertController extends Controller
 				// On récupère ce qui a été modifié par le ou les listeners, ici le message
 			// GE
 			$advert->setContent($event->getMessage());
-			
+			// Get Data of AdvertSKill from Form
+			$ads = $advert->getAdvertskilles();
+			foreach($ads as $s)
+			{
+				 // Set Current Advert
+			     $s->setAdvert($advert);
+				 // Re-set the AdvertSkills in Advert object
+       		     $advert->addAdvertskille($s);
+			}
+
 			$em->persist($advert);
 			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée');
@@ -295,9 +304,18 @@ class AdvertController extends Controller
 		$form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
 	
 		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+			// Get Data of AdvertSKill from Form
+			$ads = $advert->getAdvertskilles();
+			foreach($ads as $s)
+			{
+				 // Set Current Advert
+			     $s->setAdvert($advert);
+				 // Re-set the AdvertSkills in Advert object
+       		     $advert->addAdvertskille($s);
+			}
 			// On récupère l'EntityManager
 			$em = $this->get('doctrine')->getManager();	
-			//$em->persist($advert);
+			//$em->merge($advert);
 			$em->flush();
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
 			return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));

@@ -1,0 +1,7 @@
+{# src/Blogger/BlogBundle/Resources/view/Page/contactEmail.txt.twig #}
+A contact was made by {{ contact.name }} at {{ "now" | date("Y-m-d H:i") }}.
+
+Reply-To: {{ contact.email }}
+Subject: {{ contact.subject }}
+Body:
+{{ contact.body }}

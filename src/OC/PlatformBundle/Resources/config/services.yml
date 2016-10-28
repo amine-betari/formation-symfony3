@@ -13,6 +13,8 @@ services:
         class: OC\PlatformBundle\Email\ApplicationMailer
         arguments:
             -  "@mailer"
+            -  "@templating"
+            -  "@service_container"
     oc_platfrom_doctrine_listener.application_creation:
         class: OC\PlatformBundle\DoctrineListener\ApplicationCreationListener
         arguments:

@@ -27,6 +27,7 @@
 		</div>
 	  </div>
 	    {# Idem pour un autre champ. #}
+
 	  <div class="form-group">
 		{{ form_label(form.content, "Contenu de l'annonce", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 		{{ form_errors(form.title) }}
@@ -34,26 +35,48 @@
 		  {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
 		</div>
 	  </div>
+		{# Bloc to custom render balise #}
+	    <!-- 1er méthode -->
+		{# {% form_theme form _self %}
+		{% block integer_widget %}
+			<!-- <div class='integer_widget'>
+				{% set type = type|default('number') %}
+				{{ block('field_widget') }}
+				<input type="{{ type }}" {{ block('widget_attributes') }} value={% if advert.nbApplications is defined %}"{{ advert.nbApplications }}" {% endif %} />
+			</div> -->
+		{% endblock integer_widget %}#}
+		{# END Bloc to custom render balise #}
+		<!-- 2eme méthode -->
+		{# {% form_theme form 'AmineBundle:Form:fields.html.twig' %} #}
+		{{ form_row(form.nbApplications)}}
+
 		{{ form_row(form.author) }}
 		{% if form.pubished is defined %}
 			{{ form_row(form.published) }}
 		{% endif %}
-		{{ form_row(form.image) }}
-		
 		<div class="well">
-		
-			{# <!--<ul class="tags" data-prototype="{{ form_widget(form.categories.vars.prototype)|e('html_attr') }}"> --> #}
-		
-			</ul>
+			{{ form_row(form.image) }} 
+			{% if advert is defined %}
+				{% if advert.image is not null %}
+					<img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" >
+				{% endif %}
+			{% endif %}
 		</div>
-
-		{# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
-		{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
-
+		<div class="well">
+			{{ form_label(form.advertskilles) }}
+			<ul class="tags" data-prototype="{{ form_widget(form.advertskilles.vars.prototype)|e('html_attr') }}"> 
+			<!-- <ul class="tags">  -->
+			</ul> 
+		
+			
+		</div>
 		{# Génération automatique des champs pas encore écrits.
 			Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
 			et tous les champs cachés (type « hidden »). #}
 		{{ form_rest(form) }}
+
+		{# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+		{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
 
 		{# Fermeture de la balise <form> du formulaire HTML #}
 		{{ form_end(form) }}
@@ -68,7 +91,7 @@
 	var $collectionHolder;
 
 	// setup an "add a tag" link
-	var $addTagLink = $('<a href="#" class="add_tag_link">Add a skill</a>');
+	var $addTagLink = $('<a href="#" class="add_tag_link">Add a Skill</a>');
 	var $newLinkLi = $('<li></li>').append($addTagLink);
 
 	jQuery(document).ready(function() {
@@ -77,6 +100,7 @@
 
 		// add the "add a tag" anchor and li to the tags ul
 		$collectionHolder.append($newLinkLi);
+
 		$collectionHolder.find('li').each(function() {
 			addCategoryFormDeleteLink($(this));
 		});
@@ -84,6 +108,7 @@
 		// count the current form inputs we have (e.g. 2), use that as the new
 		// index when inserting a new item (e.g. 2)
 		$collectionHolder.data('index', $collectionHolder.find(':input').length);
+		
 
 		$addTagLink.on('click', function(e) {
 			// prevent the link from creating a "#" on the URL
@@ -94,19 +119,26 @@
 		});
 	});
 	function addCategoryForm($collectionHolder, $newLinkLi) {
-    // Get the data-prototype explained earlier
+		// Get the data-prototype explained earlier
 		var prototype = $collectionHolder.data('prototype');
 
 		// get the new index
 		var index = $collectionHolder.data('index');
-
-		// Replace '__name__' in the prototype's HTML to
-		// instead be a number based on how many items we have
-		var newForm = prototype.replace(/__name__/g, index);
-
-		// increase the index with one for the next item
-		$collectionHolder.data('index', index + 1);
-
+		// Managin the cas of update action
+		if($('#advert_edit_advertskilles > .form-group').length > 0) {
+			index = $('#advert_edit_advertskilles > .form-group').length;
+			// Replace '__name__' in the prototype's HTML to
+			// instead be a number based on how many items we have
+			var newForm = prototype.replace(/__name__/g, index);
+			// increase the index with one for the next item
+			$collectionHolder.data('index', index + 1);
+		} else {
+			// Replace '__name__' in the prototype's HTML to
+			// instead be a number based on how many items we have
+			var newForm = prototype.replace(/__name__/g, index);
+			// increase the index with one for the next item
+			$collectionHolder.data('index', index + 1);
+		}
 		// Display the form in the page in an li, before the "Add a tag" link li
 		var $newFormLi = $('<li></li>').append(newForm);
 		$newLinkLi.before($newFormLi);

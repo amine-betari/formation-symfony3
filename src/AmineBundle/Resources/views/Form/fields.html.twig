@@ -1,0 +1,8 @@
+{# src/Acme/DemoBundle/Resources/views/Form/fields.html.twig #}
+
+{% block integer_widget %}
+    <div class="integer_widget">
+        {% set type = type|default('number') %}
+        {{ block('field_widget') }}
+    </div>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace OC\PlatformBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use OC\PlatformBundle\Form\AdvertSkillType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -14,8 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use OC\PlatformBundle\Repository\CategoryRepository;
-//use Symfony\Component\Form\Extension\Core\Type\SkillType;
 use OC\PlatformBundle\Form\CkeditorType;
+//use Symfony\Component\Form\Extension\Core\Type\SkillType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
@@ -44,42 +45,44 @@ class AdvertType extends AbstractType
 			  ->add('content',   CkeditorType::class, array('attr' => array('class' => 'ckeditor')))
 			  ->add('author',    TextType::class)
 			  //->add('published', CheckboxType::class, array('required' => false))
-			  ->add('image', ImageType::class) // ImageType est un formulaire
-			  /*->add('categories', CollectionType::class, array(
+			  ->add('image', ImageType::class, array('required' => false)) // ImageType est un formulaire
+/*			  ->add('categories', CollectionType::class, array(
 			      'entry_type'   => CategoryType::class,
 				  'allow_add'    => true,
 				  'allow_delete' => true
 			  ))*/
 			  
-			    ->add('categories', EntityType::class, array(
-				 'class'        => 'OCPlatformBundle:Category',
-				 'choice_label' => 'name',
-				 'multiple'     => true,
-			   ))
-			   ->add('Skill', EntityType::class, array(
-				'class'			=> 'OCPlatformBundle:Skill',
-				'choice_label'      => 'name',
-				'multiple'      => true,
-				'expanded'      => true,
-				//'property_path' => false,
-			   ))
-			  // ->add('categories', EntityType::class, array(
-				// 'class'         => 'OCPlatformBundle:Category',
-				// 'choice_label'  => 'name',
+			   
+			   // ->add('Skill', EntityType::class, array(
+				// 'class'			=> 'OCPlatformBundle:Skill',
+				// 'choice_label'      => 'name',
 				// 'multiple'      => true,
-				// 'query_builder' => function(CategoryRepository $repository) use($pattern) {
-					// return $repository->getLikeQueryBuilder($pattern);
-				// }
-			  // ))
-			  ->add('save',      SubmitType::class);
+				// 'expanded'      => true,
+			   // ))
+			   ->add('advertskilles', CollectionType::class, array(
+				'entry_type'			=> AdvertSkillType::class,
+				'allow_add'    => true,
+				'allow_delete' => true,
+				'by_reference' => false,
+			   ))
+			   ->add('categories', EntityType::class, array(
+				 'class'         => 'OCPlatformBundle:Category',
+				 'choice_label'  => 'name',
+				 'multiple'      => true,
+				 'expanded'	 => true
+				/* 'query_builder' => function(CategoryRepository $repository) use($pattern) {
+				return $repository->getLikeQueryBuilder($pattern);
+				 }*/
+			   ))
+			  ->add('save',      SubmitType::class)
             
 			
+			->add('nbApplications');
 			/*->add('updatedAt', 'datetime')
-            ->add('nbApplications')
             ->add('slug')
             ->add('categories')
             ->add('image')*/
-        ;
+        
 		
 		// On ajoute une fonction qui va écouter un événement 
 		$builder->addEventListener(

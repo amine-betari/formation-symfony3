@@ -10,4 +10,9 @@ namespace OC\PlatformBundle\Repository;
  */
 class AdvertSkillRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getSkillByAdvertAndSkill($advert, $skill)
+	{
+		// $queryBuilder = $this->createQueryBuilder('ads');
+		// $queryBuilder = $queryBuilder->where('ads. <= :days');
+	}
 }

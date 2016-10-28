@@ -13,7 +13,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class SkillRepository extends \Doctrine\ORM\EntityRepository
 {
-public function getSkills($page, $nbPerPage)
+	public function getSkills($page, $nbPerPage)
 	{
 		$queryBuilder = $this->createQueryBuilder('s');
 		$query = $queryBuilder->getQuery();
@@ -25,4 +25,6 @@ public function getSkills($page, $nbPerPage)
 		->setMaxResults($nbPerPage);
 		return new Paginator($query, true);
 	}
+	
+	
 }

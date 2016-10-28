@@ -1,0 +1,35 @@
+{# src/Blogger/BlogBundle/Resources/views/Page/contact.html.twig #}
+{% extends 'AmineBundle::layout.html.twig' %}
+
+{% block title %}Contact - {{ parent() }} {% endblock%}
+
+{% block body %}
+<header>
+  <h1>Contact Amine</h1>
+</header>
+
+
+<div class="blogger-notice">
+  {% for flashMessage in app.session.flashbag.get('contact') %}
+				{{ flashMessage }}
+  {% endfor %}
+</div>
+<div class="well">
+	{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+	
+	{# Les erreurs générales du formulaire. #}
+	{{ form_errors(form) }}
+	
+	{# Rendu formulaire #}
+	{{ form_widget(form) }}
+	{# Rendu formulaire #}
+	
+	    <input type="submit" />
+
+	{{ form_rest(form) }}
+
+	{# Fermeture de la balise <form> du formulaire HTML #}
+	{{ form_end(form) }}
+</div>
+{% endblock %}
+
