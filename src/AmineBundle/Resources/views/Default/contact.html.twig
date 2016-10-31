@@ -11,7 +11,7 @@
 
 <div class="blogger-notice">
   {% for flashMessage in app.session.flashbag.get('contact') %}
-				{{ flashMessage }}
+			<p class="message-contact">	{{ flashMessage }} </p>
   {% endfor %}
 </div>
 <div class="well">
@@ -24,7 +24,7 @@
 	{{ form_widget(form) }}
 	{# Rendu formulaire #}
 	
-	    <input type="submit" />
+	    <input id="submit" class="submit" value="Valider" type="submit" />
 
 	{{ form_rest(form) }}
 

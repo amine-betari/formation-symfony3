@@ -60,16 +60,16 @@ class AdvertController extends Controller
 		$validator = $this->get('validator');
 		
 		// On déclenche la validation sur notre objet
-		$listErrors = $validator->validate($advert);
+		/*$listErrors = $validator->validate($advert);
 		
 		if(count($listErrors) > 0) {
 			return new Response((string) $listErrors);
-		} else {
+		} else {*/
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($advert);
 			$em->flush(); // c'est à ce moment qu'est généré le slug
-			return new Response('Slug généré : '.$advert->getSlug());
-		}
+			return new Response('<h1>Slug généré : </h1>'.$advert->getSlug());
+		//}
 		
 	}
 	

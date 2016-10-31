@@ -8,7 +8,6 @@
 
 {% block ocplatform_body %}
 	<h2>Liste des annonces</h2>
-
 	<ul style="clear:both; overflow:hidden">
     {% for advert in listAdverts %}
       <li style="height: 150px; width: 72%; float:left;">
@@ -19,7 +18,7 @@
 		{% endif %}
 	  </p>
 	   <p> 
-			<a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
+			<a href="{{ path('oc_platform_view', {'id': advert.id}) }}" class="link-article">
 				{{ advert.title }}
 			</a>
 			 <span> par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }} /<span> <br />
@@ -35,8 +34,6 @@
 
 		</p>
       </li>
-    {% else %}
-      <li>Pas (encore !) d'annonces</li>
     {% endfor %}
 	</ul>
 	<ul class="pagination">
