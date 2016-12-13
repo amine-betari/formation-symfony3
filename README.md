@@ -7,3 +7,5 @@ A Symfony project created on July 15, 2016, 11:53 pm.
 Code source => Auto Formation => Symfony3
 # Synchroniser avec Jenkins
 Symfony2/3 => Jenkins
+# Sychroniser with Jenkins Automatic
+
