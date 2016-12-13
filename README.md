@@ -9,3 +9,5 @@ Code source => Auto Formation => Symfony3
 Symfony2/3 => Jenkins
 # Sychroniser with Jenkins Automatic
 Jenkins
+# Se former sur EzPlatform
+
