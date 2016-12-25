@@ -22,7 +22,34 @@
     </target>
 
     <target name="qa" description="Lance les outils d'analyse">
-
+		<phingcall target="pdepend" />
+		<phingcall target="phpmd" />
+		<phingcall target="phpcpd" />
+		<phingcall target="phploc" />
     </target>
+	
+	<target name="pdepend">
+		<phpdepend file="${project.basedir}/src/Controller">
+			<logger type="jdepend-xml" outfile="${project.basedir}/build/logs/jdepend.xml" />
+			<logger type="jdepend-chart" outfile="${project.basedir}/build/pdepend/dependencies.svg" />
+			<logger type="overview-pyramid" outfile="${project.basedir}/build/pdepend/overview-pyramid.svg" />
+		</phpdepend>
+
+	</target>
+	<target name="phpmd">
+		<phpmd file="${project.basedir}/src/Controller">
+			<formatter type="xml" outfile="${project.basedir}/build/phpmd.xml" />
+		</phpmd>
+	</target>
+	<target name="phpcpd">
+		<phpcpd file="${project.basedir}/src/Controller">
+			<formatter type="pmd" outfile="${project.basedir}/build/logs/pmd-cpd.xml"/>
+		</phpcpd>
+	</target>
+	<target name="phploc">
+		 <exec  logoutput="true" dir="${project.basedir}" 
+				command="phploc --log-csv '${project.basedir}/build/logs/phploc.csv' '${project.basedir}/src/Controller'" 
+				escape="false" />
+	</target>
 
 </project>
