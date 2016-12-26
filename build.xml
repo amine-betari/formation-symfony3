@@ -24,7 +24,7 @@
 		<phingcall target="phpmd" />
 		<phingcall target="phpcpd" />
 		<phingcall target="phploc" />
-		<phingcall target="phpdoc" />
+		<!--<phingcall target="phpdoc" />-->
 		<phingcall target="phpunit" />
 		<phingcall target="phpcs" />
     </target>
