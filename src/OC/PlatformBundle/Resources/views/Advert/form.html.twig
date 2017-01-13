@@ -1,3 +1,4 @@
+
 {# src/OC/PlatformBundle/Resources/views/Advert/form.html.twig #}
 
 <h3>Formulaire d'annonce</h3>
@@ -15,8 +16,8 @@
 	{% endif %}
 	{# Génération manuelle et éclatée : #}
 	  <div class="form-group">
-		{# Génération du label. #}
-		{{ form_label(form.title, "Titre de l'annonce", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+ 		{#  Génération du label. #}
+		{{ form_label(form.title, "Titre de l'annonce", {'label_attr': {'class': 'col-sm-2 control-label'}}) }} 
 
 		{# Affichage des erreurs pour ce champ précis. #}
 		{{ form_errors(form.title) }}
@@ -48,7 +49,7 @@
 		{# END Bloc to custom render balise #}
 		<!-- 2eme méthode -->
 		{# {% form_theme form 'AmineBundle:Form:fields.html.twig' %} #}
-		{{ form_row(form.nbApplications)}}
+		{# {{ form_row(form.nbApplications)}} #}
 
 		{{ form_row(form.author) }}
 		{% if form.pubished is defined %}

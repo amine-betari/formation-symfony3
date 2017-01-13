@@ -169,7 +169,7 @@ class AdvertController extends Controller
 		
 		// On creér le formBuilder grâce au service form factory
 		//$formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $advert);
-		$form = $this->get('form.factory')->create(AdvertType::class, $advert);
+		$form = $this->get('form.factory')->create(AdvertType::class, $advert, array('user' => $this->getUser()));
 		
 		//exit(\Doctrine\Common\Util\Debug::dump($advert->getId()));
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
@@ -301,7 +301,7 @@ class AdvertController extends Controller
 		}
 		
 		// On creér le formBuilder grâce au service form factory
-		$form = $this->get('form.factory')->create(AdvertEditType::class, $advert);
+		$form = $this->get('form.factory')->create(AdvertEditType::class, $advert, array('user' => $this->getUser()));
 	
 		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 			// Get Data of AdvertSKill from Form

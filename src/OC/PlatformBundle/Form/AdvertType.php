@@ -19,17 +19,19 @@ use OC\PlatformBundle\Form\CkeditorType;
 //use Symfony\Component\Form\Extension\Core\Type\SkillType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+//use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 
 class AdvertType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-		$pattern = 'I%';
+	$pattern = 'I%';
         $builder
             ->add('date',  DateType::class, [
 					'widget' => 'single_text',
@@ -43,10 +45,10 @@ class AdvertType extends AbstractType
 			  ->add('title',     TextType::class)
 			  //->add('content',   TextareaType::class)
 			  ->add('content',   CkeditorType::class, array('attr' => array('class' => 'ckeditor')))
-			  ->add('author',    TextType::class)
+			  ->add('author',    TextType::class, array('data' => $options['user']))
 			  //->add('published', CheckboxType::class, array('required' => false))
 			  ->add('image', ImageType::class, array('required' => false)) // ImageType est un formulaire
-/*			  ->add('categories', CollectionType::class, array(
+                  	  /*->add('categories', CollectionType::class, array(
 			      'entry_type'   => CategoryType::class,
 				  'allow_add'    => true,
 				  'allow_delete' => true
@@ -74,10 +76,10 @@ class AdvertType extends AbstractType
 				return $repository->getLikeQueryBuilder($pattern);
 				 }*/
 			   ))
-			  ->add('save',      SubmitType::class)
+			  ->add('save',      SubmitType::class);
             
 			
-			->add('nbApplications');
+			//->add('nbApplications');
 			/*->add('updatedAt', 'datetime')
             ->add('slug')
             ->add('categories')
@@ -113,7 +115,8 @@ class AdvertType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'OC\PlatformBundle\Entity\Advert'
+            'data_class' => 'OC\PlatformBundle\Entity\Advert',
+	    'user' => null,
         ));
     }
 }
