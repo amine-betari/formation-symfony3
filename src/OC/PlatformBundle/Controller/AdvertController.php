@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 //use OC\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
+use Monolog\Logger;
 
 
 
@@ -75,6 +75,11 @@ class AdvertController extends Controller
 	
     public function indexAction($page)
     {
+		// Use Monolog
+		$logger = $this->get('logger');
+		$logger->info('Tout va bien, je suis en version 3.1.0');
+		$logger->critical('Mais il m\'enerve ');
+		// Use Monolog	
 		//if ($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
 		
 		$url = $this->get('router')->generate(

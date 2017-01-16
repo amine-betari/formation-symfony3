@@ -104,11 +104,22 @@
 
 		$collectionHolder.find('li').each(function() {
 			addCategoryFormDeleteLink($(this));
+
 		});
 
 		// count the current form inputs we have (e.g. 2), use that as the new
 		// index when inserting a new item (e.g. 2)
 		$collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+		// Managing  Update 
+		if($('#advert_edit_advertskilles > .form-group').length > 0) {
+			var $collectionlistas = $('#advert_edit_advertskilles > .form-group');
+			console.log($collectionlistas.length);
+		        $collectionlistas.find('.form-group').each(function( index ) {
+	        	        console.log('index :');console.log(index);
+				console.log('this :'); console.log($(this));
+	                });
+		}
 		
 
 		$addTagLink.on('click', function(e) {
@@ -131,6 +142,7 @@
 			// Replace '__name__' in the prototype's HTML to
 			// instead be a number based on how many items we have
 			var newForm = prototype.replace(/__name__/g, index);
+		
 			// increase the index with one for the next item
 			$collectionHolder.data('index', index + 1);
 		} else {

@@ -1,7 +1,9 @@
 Hello: Bonjour
 Bye: __Bye
-Home: __Home
-add.advert: Ajouter une annonce
+Home: Accueil
+add.advert: 'Ajouter une annonce'
 Déconnexion: __Déconnexion
 Connexion: __Connexion
 Register: __Register
+Add Skill: Ajoute une compétence
+'List Skills': '__List Skills'
