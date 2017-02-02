@@ -22,10 +22,10 @@ class AdvertSkillRepository extends \Doctrine\ORM\EntityRepository
       		// var_dump($queryBuilder->getQuery()->getParameters());
 
 		// Une 2eme piste
-		$query = $this->_em->createQuery('SELECT ads from OCPlatformBundle:AdvertSkill ads where ads.advert =122  and ads.skill=92 ');
+		$query = $this->_em->createQuery('SELECT ads from OCPlatformBundle:AdvertSkill ads where ads.advert ="$advert" andWhere ads.skill="$skill"');
 		$resultat = $query->getResult();
 //		return $queryBuilder->getQuery()->getResult();
-//			var_dump($query->getSql()); exit;
+			var_dump($query->getSql()); exit;
 		return $resultat;
 	}
 }

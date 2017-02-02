@@ -9,7 +9,7 @@
 	
 	{# Les erreurs générales du formulaire. #}
 	{{ form_errors(form) }}
-
+	{# {{advert.id}} #}
 	{% if form.date is defined %}
 		{# Génération du label + error + widget pour un champ. #}
 		{{ form_row(form.date) }}
@@ -114,22 +114,47 @@
 		// Managing  Update 
 		if($('#advert_edit_advertskilles > .form-group').length > 0) {
 			var $collectionlistas = $('#advert_edit_advertskilles > .form-group');
-			console.log($collectionlistas.length);
-		        $collectionlistas.find('.form-group').each(function( index ) {
-	        	        console.log('index :');console.log(index);
-				console.log('this :'); console.log($(this));
-	                });
+			for (var i=0; i<$collectionlistas.length; i++ ) {
+			      	$collectionlistas.find('#advert_edit_advertskilles_'+i+'').each(function( index ) {
+		        	     	var $node = $(this).find('#advert_edit_advertskilles_'+i+'_skill').val();
+					$(this).append('<a href="#" data-node="'+$node+'" class="relation" >Delete this Element</a>')
+			        });
+			}
 		}
 		
 
 		$addTagLink.on('click', function(e) {
 			// prevent the link from creating a "#" on the URL
 			e.preventDefault();
-
 			// add a new tag form (see next code block)
 			addCategoryForm($collectionHolder, $newLinkLi);
 		});
+		// click delete button element
+		var $link = $('.relation');
+		$link.on('click', function(e) {
+			e.preventDefault();
+			$node = $(this).data('node');
+			$idAdvert = $('#advert_edit_advertId').val();
+			//call method ajax
+			ajaxCall($node, $idAdvert, $(this));
+		});
 	});
+
+	// Ajax traitement 
+	function ajaxCall($node, $idAdvert, $thisElement) {
+		$.ajax({
+			url: "{{path('oc_platform_delete_element')}}",
+			method: "post",
+			beforeSend: function() { $thisElement.html('En charge ...') },
+			data: {id: $node, idAdvert: $idAdvert},
+			success: function(json){
+				$thisElement.parent().hide();
+				$thisElement.parent().remove();
+				$('#advert_edit_advertskilles').load();
+			}
+		});
+	}
+
 	function addCategoryForm($collectionHolder, $newLinkLi) {
 		// Get the data-prototype explained earlier
 		var prototype = $collectionHolder.data('prototype');
@@ -142,7 +167,6 @@
 			// Replace '__name__' in the prototype's HTML to
 			// instead be a number based on how many items we have
 			var newForm = prototype.replace(/__name__/g, index);
-		
 			// increase the index with one for the next item
 			$collectionHolder.data('index', index + 1);
 		} else {
@@ -160,13 +184,12 @@
 	function addCategoryFormDeleteLink($tagFormLi) {
 		var $removeFormA = $('<a href="#"> Delete this skill</a>');
 		$tagFormLi.append($removeFormA);
-
 		$removeFormA.on('click', function(e) {
 			// prevent the link from creating a "#" on the URL
 			e.preventDefault();
-
 			// remove the li for the tag form
 			$tagFormLi.remove();
 		});
 	}
+	
 </script>

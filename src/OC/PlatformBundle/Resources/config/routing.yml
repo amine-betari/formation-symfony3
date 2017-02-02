@@ -1,3 +1,8 @@
+oc_platform_delete_element:
+    path: /advert/delete
+    defaults:
+        _controller: OCPlatformBundle:Advert:deleteRelation
+    condition: "request.isXmlHttpRequest()"        
 oc_platform_view:
     path:    /advert/{id}
     defaults:
