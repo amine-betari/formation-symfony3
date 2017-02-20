@@ -18,8 +18,8 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new OC\PlatformBundle\OCPlatformBundle(),
             new AmineBundle\AmineBundle(),
-			//new Doctrine\Bundle\FixturesBundles\DoctrineFixturesBundle(),
-		    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+	  	//new Doctrine\Bundle\FixturesBundles\DoctrineFixturesBundle(),
+	    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new OC\UserBundle\OCUserBundle(),
 			new FOS\UserBundle\FOSUserBundle(),
 			// new HWI\Bundle\OAuthBundle\HWIOAuthBundle()

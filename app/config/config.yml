@@ -81,6 +81,9 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: OC\UserBundle\Entity\User
+    from_email:
+        address: amine.betari@gmail.com
+        sender_name: Formation Symfony3	
 # Assetic Configuration
 assetic:
     debug:          '%kernel.debug%'	
