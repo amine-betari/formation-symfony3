@@ -73,10 +73,10 @@ swiftmailer:
     spool:     { type: memory }
 
 # Stof\DoctrineExtensionsBundle configuration
-stof_doctrine_extensions:
-    orm:
-        default:
-            sluggable: true		
+#stof_doctrine_extensions:
+#    orm:
+#        default:
+#            sluggable: true		
 # FOS\UserBundle configuration
 fos_user:
     db_driver: orm
@@ -84,7 +84,7 @@ fos_user:
     user_class: OC\UserBundle\Entity\User
     from_email:
         address: amine.betari@gmail.com
-        sender_name: You
+        sender_name: Formation Symfony3	
 # Assetic Configuration
 assetic:
     debug:          '%kernel.debug%'	
