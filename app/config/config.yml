@@ -9,6 +9,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    brochures_directory: '%kernel.root_dir%/../web/uploads/brochures'
 
 framework:
     #esi:             ~
@@ -81,6 +82,9 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: OC\UserBundle\Entity\User
+    from_email:
+        address: amine.betari@gmail.com
+        sender_name: You
 # Assetic Configuration
 assetic:
     debug:          '%kernel.debug%'	

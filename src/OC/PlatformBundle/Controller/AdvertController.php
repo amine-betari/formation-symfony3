@@ -7,6 +7,7 @@ use OC\PlatformBundle\Event\MessagePostEvent;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Form\AdvertType;
 use OC\PlatformBundle\Form\AdvertEditType;
+use OC\PlatformBundle\Form\ApplicationType;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\AdvertSkill;
@@ -141,14 +142,12 @@ class AdvertController extends Controller
 
     public function viewAction(Request $request, Advert $advert) 
 	{
-		//echo $advert->getId(); exit;
-		// Grâce à cette signature Advert $advert, nous venons d'économiser :
-		// $em->find() ainsi que le if (null !== $advert)
-		// On peut faire tout simplement $advert->getID();
+	
+	// Grâce à cette signature Advert $advert, nous venons d'économiser :
+	// $em->find() ainsi que le if (null !== $advert)
+	// On peut faire tout simplement $advert->getID();
 	$id = $request->attributes->get('id');
-	// return new Response("Affichage de l'annonce d'id : ".$id.", avec le tag :". $tag);
-    // return $this->get('templating')->renderResponse('OCPlatformBundle:Advert:view.html.twig', array('id' => $id, 'tag' => $tag));
-
+	// return $this->get('templating')->renderResponse('OCPlatformBundle:Advert:view.html.twig', array('id' => $id, 'tag' => $tag));
 	// Return Reposne HTTP de type redirection 
 	$url = $this->get('router')->generate('oc_platform_home');
 	// return new RedirectResponse($url);
@@ -183,8 +182,30 @@ class AdvertController extends Controller
 	//$test = $advert->getApplications();
 	// Get list AdvertSkill of Advert
 	$listAdvertSkills = $em->getRepository('OCPlatformBundle:AdvertSkill')->findBy(array('advert' => $advert));
-	
+	// Debut Application 
+	// Create a new Entity of Application
+	$application = new Application();
+//	print_r($this->get('kernel')->getRootDir());
+	// Get Form Application 
+	$form = $this->get('form.factory')->create(ApplicationType::class, $application, array('user' => $this->getUser()));
+	// Submit Form
+	if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+		// $file stores the uploaded PDF file
+		/** @var Symfony\Component\HttpFoundation\File\UpLoadedFile $file */
+		$file = $application->getBrochure();
+		// call a service, in Symfony tout objet doit être un service
+		$fileName = $this->get('oc_platform.brochure_uploader')->upload($file);
+		// Update the 'brochure' property to store the PDF file name instead of its contents
+		$application->setBrochure($fileName);
+		// set Object  Advert
+		$application->setAdvert($advert);
+		// Persist Object 
+		$em->persist($application);
+		$em->flush();
+			
+	}
 	return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
+			'form' =>  $form->createView(),
 			'advert' => $advert, 
 			'listApplications' => $listApplications,
 			'listAdvertSkills' => $listAdvertSkills,
@@ -209,29 +230,23 @@ class AdvertController extends Controller
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 			// exit(\Doctrine\Common\Util\Debug::dump($form->getData()));
 			// On récupère l'EntityManager
-			$em = $this->get('doctrine')->getManager();	
-			
+			$em = $this->get('doctrine')->getManager();
 			// $user = $em->getRepository('OCUserBundle:User')->findBy(array('username' => 'soukaina'));
-			
 			$event = new MessagePostEvent($advert->getContent(), $this->getUser());
-
 			// on déclenche l'événement
 			$this->get('event_dispatcher')->dispatch(PlatformEvents::POST_MESSAGE, $event);
 			
 			// On fait le lien Request <=> Form
 			// à partir du maintenant, la variable $advert contient les valeurs entrées dans le form par le visiteur
-					//$form->handleRequest($request);
+			//$form->handleRequest($request);
 			// On vérifie que les valeurs entrées sont correctes
 			//if($form->isValid()) {
-			
-				
 			// Création de l'entité Image
 			/*$image = new Image;
 			$image->setUrl('https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT3fWBugQz8xxR4ZhjMyox5CE3cjWsp9CgrOYp_H9EmEDb9hYCX');
 			$image->setAlt('Job de rêve');
 			// On lié  l'image à l'annonce
 			$advert->setImage($image);*/
-			
 			// GE
 				// On récupère ce qui a été modifié par le ou les listeners, ici le message
 			// GE
@@ -240,10 +255,10 @@ class AdvertController extends Controller
 			$ads = $advert->getAdvertskilles();
 			foreach($ads as $s)
 			{
-				 // Set Current Advert
+			 // Set Current Advert
 			     $s->setAdvert($advert);
-				 // Re-set the AdvertSkills in Advert object
-       		     $advert->addAdvertskille($s);
+			 // Re-set the AdvertSkills in Advert object
+	       		     $advert->addAdvertskille($s);
 			}
 
 			$em->persist($advert);
@@ -261,39 +276,10 @@ class AdvertController extends Controller
 			throw new \Exception('Votre message a été détecté comme spam !');
 		}*/
 		
-		/*$advert = new Advert;
-		$advert->setTitle('Recherche CPT');
-		$advert->setAuthor('Admin');
-		$advert->setContent('Chef de projet technique à Labsara');
-		
-		// Création d'une 1er candidature 
-		$application1 = new Application();
-		$application1->setAuthor('Soukaina');
-		$application1->setContent('J\'ai toutes les qualités requises');
-		
-		// Création d'une 2eme candidature 
-		$application2 = new Application();
-		$application2->setAuthor('Chelhi');
-		$application2->setContent('Je ne suis plus motivée ');
-		
-		// Création d'une 3eme candidature 
-		$application3 = new Application();
-		$application3->setAuthor('Amine');
-		$application3->setContent('Lead Ded PHP');
-		
-		// liers les candidatures à l'annonce
-		$application1->setAdvert($advert);
-		$application2->setAdvert($advert);
-		$application3->setAdvert($advert);
-		
-		// Création de l'entité Image
-		$image = new Image;
-		$image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
-		$image->setAlt('Job de rêve');
-		
+	
 		// On lié  l'image à l'annonce
 		$advert->setImage($image);
-		
+	
 		// Get All Skills
 		$listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
 		//  for each skill
@@ -312,14 +298,7 @@ class AdvertController extends Controller
 		// Si on  n'avait pas défini le cascade={"persist"},
 		// on devrait persister à la main l'entité $image
 		// $em->persist($image);
-		
-		// Etape 2 : On flush tout ce qui a été persisté avant
-		
-		$em->persist($application1);$em->persist($application2);$em->persist($application3);
-		
-		$em->flush();
-		*/
-    }
+	}
 
 	
     public function editAction($id, Request $request) 
