@@ -3,6 +3,7 @@
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Application
@@ -50,6 +51,12 @@ class Application
      */
     private $date;
 
+    /**
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Please, upload the product brochure as a PDF file.")
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $brochure;
 
 	public function __construct(){
 		$this->date = new \Datetime();
@@ -174,4 +181,28 @@ class Application
 	public function decrease(){
 		$this->getAdvert()->decreaseApplication();
 	}	
+
+    /**
+     * Set brochure
+     *
+     * @param string $brochure
+     *
+     * @return Application
+     */
+    public function setBrochure($brochure)
+    {
+        $this->brochure = $brochure;
+
+        return $this;
+    }
+
+    /**
+     * Get brochure
+     *
+     * @return string
+     */
+    public function getBrochure()
+    {
+        return $this->brochure;
+    }
 }

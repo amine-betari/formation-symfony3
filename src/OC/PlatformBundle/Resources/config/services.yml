@@ -69,3 +69,13 @@ services:
         class: OC\PlatformBundle\ParamConverter\JsonParamConverter
         tags:
             - { name: request.param_converter }
+    oc_platform.brochure_uploader:
+        class: OC\PlatformBundle\File\FileUploader
+        arguments: ['%brochures_directory%']
+    oc_platform.doctrine_brochure_listener:
+        class: OC\PlatformBundle\EventListener\BrochureUploadListener
+        arguments: ['@oc_platform.brochure_uploader']
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postRemove }

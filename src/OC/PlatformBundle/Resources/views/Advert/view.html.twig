@@ -7,7 +7,8 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-  {% if advert.image is not null %}
+
+ {% if advert.image is not null %}
 	<img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" >
   {% endif %}
   <h2>{{ advert.title }}</h2>
@@ -23,8 +24,6 @@
 		</p>
 	{% endif %}
 		<p>	{{ advert.content }} </p>
-	{# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
-
 	{% if listAdvertSkills|length > 0 %}
 	  <div>
 		Cette annonce <b> </b>requiert les compétences suivantes :
@@ -37,10 +36,12 @@
 	{% endif %}
 
   </div>
+{% if is_granted('ROLE_ADMIN') %}
   <div class="well">
 	<h3>Liste des candidatures</h3>
 	<ul>
 	{% for application in listApplications %}
+		<a href="{{ asset('uploads/brochures/' ~ application.brochure) }}">View brochure (PDF)</a>
 		<li>M ou Mlle {{application.author}} a posté une candidature le {{application.date|date('d/m/Y') }} :
 		<strong>{{ application.content }}</strong> 
 		<span><a href="{{ path('oc_platform_delete_application', {'id': application.id}) }}">Delete this candidature</a></span>
@@ -63,5 +64,13 @@
       Supprimer l'annonce
     </a>
   </p>
+{% else %}
+	<div class="well">
+		<h3>Déposer Votre candidature Ici</h3>
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		{{ form_end(form) }}
 
+	</div>
+{% endif %}
 {% endblock %}
