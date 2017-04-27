@@ -18,11 +18,12 @@ class ApplicationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-	$builder
-		->add('author', TextType::class, array('data' => $options['user']))
-		->add('content', TextareaType::class)
-		->add('brochure', FileType::class, array('label' => 'Brochure (PDF file)'))
-		->add('save', SubmitType::class);
+		if( $options['user'] ) {
+			$builder
+			->add('content', TextareaType::class)
+			->add('brochure', FileType::class, array('label' => 'Brochure (PDF file)'))
+			->add('save', SubmitType::class);
+		} 
     }
     
     /**

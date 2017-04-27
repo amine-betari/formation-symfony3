@@ -8,7 +8,7 @@ oc_platform_view:
     defaults:
         _controller: OCPlatformBundle:Advert:view
     requirements:
-        id: \d+
+#        id: \d+
 oc_platform_view_skill:
     path:    /skill/{id}
     defaults:
@@ -80,3 +80,12 @@ oc_platform_view_slug:
     requirements:
         year: \d{4}
         _format: html|xml|json
+oc_platform_datatable:
+    path: /otherview
+    defaults: { _controller: OCPlatformBundle:Advert:data }
+oc_platform_grid:
+    path: /grid/{slug}
+    defaults: { _controller: OCPlatformBundle:Advert:grid }
+oc_platform_admin_datatable:
+    path: /advertlist
+    defaults: { _controller: OCPlatformBundle:Advert:dataAdmin }

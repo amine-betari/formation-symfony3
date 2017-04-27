@@ -3,7 +3,9 @@
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+//use OC\UserBundle\Entity\User;;
 
 /**
  * Application
@@ -15,11 +17,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Application
 {
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Advert", inversedBy="applications")
-	 * @ORM\JoinColumn(nullable=false)
+     /**
+      *
+      *
+      */ 
+
+     /**
+      * @ORM\ManyToOne(targetEntity="OC\PlatformBundle\Entity\Advert", inversedBy="applications")
+      * @ORM\JoinColumn(nullable=false)
      */	 
-	private $advert;
+     private $advert;
 	
     /**
      * @var int
@@ -31,9 +38,7 @@ class Application
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="author", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="OC\UserBundle\Entity\User", cascade={"persist"})
      */
     private $author;
 

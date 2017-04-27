@@ -28,6 +28,89 @@ use Monolog\Logger;
 class AdvertController extends Controller
 {
 
+
+	 /**
+         * set datatable configs
+         * @return \Waldo\DatatableBundle\Util\Datatable
+         */
+        private function datatableAdmin() 
+        {
+
+		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
+			throw new AccessDeniedException('Accès limité aux auteurs.');
+		}
+
+                $datatable =  $this->get('datatable')
+                            ->setEntity('OCPlatformBundle:Advert', 'a')
+                            ->setFields(
+                                array(
+                                        "Name"   	=> "a.title",
+			                "Compétences demandées" => "a.published",
+					"Actions" 	=> "a.date",
+                                        "_identifier_" => "a.id")
+                                )
+                             ->setRenderers(
+                                    array(
+                                        0 => array(
+					        'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
+                                        ),
+                                        1 => array(
+						'view' => 'OCPlatformBundle:Advert:_skills.html.twig'
+					),
+					2 => array(
+						'view' => 'OCPlatformBundle:Advert:_actions_admin.html.twig'
+					),
+                                    )
+                            )
+                            ->setOrder('a.date', 'desc')
+                            ->setGlobalSearch(true);
+                return $datatable;
+        }
+
+
+	/**
+   	 * set datatable configs
+	 * @return \Waldo\DatatableBundle\Util\Datatable
+	 */
+	private function datatable() 
+	{
+		$datatable =  $this->get('datatable')
+			    ->setEntity('OCPlatformBundle:Advert', 'a')
+			    ->setFields(
+				array(
+					"Name"   => "a.title",
+					"Description" => "a.content",
+					"Compétences demandées" => "a.title",
+					"_identifier_" => "a.id")
+				)
+				 //->addJoin('a.advertskilles', 'ads', \Doctrine\ORM\Query\Expr\Join::INNER_JOIN)
+				 //->addJoin('a.skill', 'skill', \Doctrine\ORM\Query\Expr\Join::INNER_JOIN)	
+			     ->setRenderers(
+	                            array(
+        	                        0 => array(
+		               	              	'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
+        	                        ),
+					2 => array(
+						'view' => 'OCPlatformBundle:Advert:_skills.html.twig'
+					),
+                	            )
+	                    )
+			    ->setOrder('a.published', 'desc')
+			    ->setGlobalSearch(true);
+		return $datatable;
+	}
+
+	/**
+	 * Grid action
+	 * @return Response
+	 */
+	public function gridAction($slug) 
+	{
+		if ($slug == 'back')  return $this->datatableAdmin()->execute();
+		if ($slug == 'front') return $this->datatable()->execute();
+	}
+
+
 	/**
 	 * @ParamConverter("json")
 	 */
@@ -36,6 +119,26 @@ class AdvertController extends Controller
 		return new Response(print_r($json, true));
 	}
 
+
+	/**
+	 *
+	 *
+	 */
+	public function dataAction() 
+	{
+		$this->datatable();
+		return $this->render('OCPlatformBundle:Advert:data.html.twig');
+	}
+
+	
+	/**
+         *
+ 	 */
+	public function dataAdminAction()
+	{
+		$this->datatable();
+		return $this->render('OCPlatformBundle:Advert:data_admin.html.twig');
+	}
 
 	/**
          * 
@@ -148,7 +251,6 @@ class AdvertController extends Controller
 	// On peut faire tout simplement $advert->getID();
 	$id = $request->attributes->get('id');
 	// return $this->get('templating')->renderResponse('OCPlatformBundle:Advert:view.html.twig', array('id' => $id, 'tag' => $tag));
-	// Return Reposne HTTP de type redirection 
 	$url = $this->get('router')->generate('oc_platform_home');
 	// return new RedirectResponse($url);
 	// return $this->redirect($url);
@@ -179,36 +281,32 @@ class AdvertController extends Controller
 	}
 	// Get list application of advert
 	$listApplications = $em->getRepository('OCPlatformBundle:Application')->findBy(array('advert' => $advert));
-	//$test = $advert->getApplications();
 	// Get list AdvertSkill of Advert
 	$listAdvertSkills = $em->getRepository('OCPlatformBundle:AdvertSkill')->findBy(array('advert' => $advert));
-	// Debut Application 
+
 	// Create a new Entity of Application
 	$application = new Application();
-//	print_r($this->get('kernel')->getRootDir());
 	// Get Form Application 
 	$form = $this->get('form.factory')->create(ApplicationType::class, $application, array('user' => $this->getUser()));
-	// Submit Form
+	// Is anonumous
+	if($this->getUser()) $anonymous = 1;
+	else $anonymous = 0;
 	if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-		// $file stores the uploaded PDF file
-		/** @var Symfony\Component\HttpFoundation\File\UpLoadedFile $file */
-		$file = $application->getBrochure();
-		// call a service, in Symfony tout objet doit être un service
-		$fileName = $this->get('oc_platform.brochure_uploader')->upload($file);
-		// Update the 'brochure' property to store the PDF file name instead of its contents
-		$application->setBrochure($fileName);
-		// set Object  Advert
+		// Gestion de brochures est au niveau des listener
 		$application->setAdvert($advert);
-		// Persist Object 
+		$application->setAuthor($this->getUser());
 		$em->persist($application);
 		$em->flush();
-			
+		// Display message flash for internaute
+		$request->getSession()->getFlashBag()->add('noticeA', 'Votre candidature a été enregistré');
 	}
+	
 	return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
 			'form' =>  $form->createView(),
 			'advert' => $advert, 
 			'listApplications' => $listApplications,
 			'listAdvertSkills' => $listAdvertSkills,
+			'anonymous' => $anonymous
 		));
     }
 
@@ -303,14 +401,12 @@ class AdvertController extends Controller
 	
     public function editAction($id, Request $request) 
     {
-//	exit;
 		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
 			throw new AccessDeniedException('Accès limité aux auteurs.');
 		}
 		
 		$em = $this->get('Doctrine')->getManager();
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
-//		$em->refresh($advert);
 		if($advert === null){
 			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas. ");
 		}
@@ -429,7 +525,7 @@ class AdvertController extends Controller
 		// delete the Advert
 		$em->remove($application);
 		$em->flush();
-		$url = $this->get('router')->generate('oc_platform_home');
+		$url = $this->get('router')->generate('oc_platform_view', array('id' => $application->getAdvert()->getId()), UrlGeneratorInterface::ABSOLUTE_URL); 
 		return $this->redirect($url);
 	}
 	

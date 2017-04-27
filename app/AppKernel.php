@@ -18,12 +18,14 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new OC\PlatformBundle\OCPlatformBundle(),
             new AmineBundle\AmineBundle(),
-	  	//new Doctrine\Bundle\FixturesBundles\DoctrineFixturesBundle(),
-//	    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+			//	new Doctrine\Bundle\FixturesBundles\DoctrineFixturesBundle(),
+			//	new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new OC\UserBundle\OCUserBundle(),
 			new FOS\UserBundle\FOSUserBundle(),
-			// new HWI\Bundle\OAuthBundle\HWIOAuthBundle()
+			//	new HWI\Bundle\OAuthBundle\HWIOAuthBundle()
 			new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+			//      new Sg\DatatablesBundle\SgDatatablesBundle(),
+		  new Waldo\DatatableBundle\WaldoDatatableBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

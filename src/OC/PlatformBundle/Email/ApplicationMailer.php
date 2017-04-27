@@ -5,7 +5,8 @@ namespace OC\PlatformBundle\Email;
 
 use OC\PlatformBundle\Entity\Application;
 use AmineBundle\Entity\Contact;
-use Symfony\Bundle\TwigBundle\TwigEngine;
+//use Symfony\Bundle\TwigBundle\TwigEngine;
+
 
 
 class ApplicationMailer
@@ -14,44 +15,56 @@ class ApplicationMailer
    * @var \Swift_Mailer
    */
   private $mailer;
-  /*
-   * @var \EngineInterface
-   */
-  private $templating;
-  /*
-   * @var \Container
-   */
+  
+  private $email;
+
+  //private $templating;
   private $service_container;
 
-  public function __construct(\Swift_Mailer $mailer, TwigEngine $templating, $service_container)
+  public function __construct(\Swift_Mailer $mailer,  $email, $service_container)
   {
-    $this->mailer = $mailer;
-	$this->templating = $templating;
+	$this->mailer = $mailer;
+	$this->email = $email;
+//	$this->templating = $templating;
 	$this->service_container = $service_container;
   }
 
   public function sendNewNotification(Application $application)
   {
-    $message = new \Swift_Message('Nouvelle candidature','Vous avez reçu une nouvelle candidature.');
+	if (!$application instanceof Application) {
+			return;
+		}
+		// mail to admin
+		$message = new \Swift_Message('Nouvelle candidature','Vous avez reçu une nouvelle candidature.');
+		$message
+		  ->setSubject('Nouvelle candidature pour le poste : '.$application->getAdvert()->getTitle())
+		  ->setFrom($application->getAuthor()->getEmail())
+		  //->setTo($this->service_container->getParameter('blogger_blog.emails.contact_email'))
+		  ->setTo($this->email)
+		  ->setBody($this->service_container->get('twig')->render('AmineBundle:Default:applicationEmailAdmin.html.twig', array('application' => $application)), 'text/html')
+		;
+		$this->mailer->send($message);
 
-    $message
-      ->addTo('amine.betari@gmail.com') // Ici bien sûr il faudrait un attribut "email", j'utilise "author" à la place
-      ->addFrom('admin@votresite.com')
-    ;
+		// mail to internaute
+                $message = new \Swift_Message('Nouvelle candidature','Vous avez reçu une nouvelle candidature.');
+                $message
+                  ->setSubject('Votre candidature pour le post '.$application->getAdvert()->getTitle())
+                  ->setFrom($this->service_container->getParameter('blogger_blog.emails.contact_email'))
+                  ->setTo($application->getAuthor()->getEmail())
+                  ->setBody($this->service_container->get('twig')->render('AmineBundle:Default:applicationEmailInternaute.html.twig', array('application' => $application)))
+                ;
+                $this->mailer->send($message);
 
-    $this->mailer->send($message);
   }
   
   public function sendMailWebMaster(Contact $contact)
   {
 	$message = new \Swift_Message('Nouveau contact','Vous avez reçu une nouvelle candidature.');
-	
-    $message
+   $message
       ->setSubject($contact->getName())
       ->setFrom($contact->getEmail())
-      ->setTo($this->service_container->getParameter('blogger_blog.emails.contact_email'))
-	  //->setTo('amine.betari@gmail.com')
-      ->setBody($this->templating->render('AmineBundle:Default:contactEmail.txt.twig', array('contact' => $contact)))
+      ->setTo('amine.betari@gmail.com')
+      ->setBody($this->service_container->get('twig')->render('AmineBundle:Default:contactEmail.txt.twig', array('contact' => $contact)))
     ;
 
     $this->mailer->send($message);

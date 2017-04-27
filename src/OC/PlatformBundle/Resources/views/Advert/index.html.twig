@@ -7,33 +7,26 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-	<h2>Liste des annonces</h2>
-	<ul style="clear:both; overflow:hidden">
+	<h2>Missions</h2>
+	<ul class="nav nav-pills nav-stacked">
     {% for advert in listAdverts %}
-      <li style="height: 150px; width: 72%; float:left;">
-	  <p style="width21%; float:left; padding-right:12px;">
-		{% if advert.image is not null %}
-			<!--<img style="vertical-align:text-top" src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" />-->
+	      <li style="height: 100px; width: 72%; float:left;">
+		<!-- <p style="width21%; float:left; padding-right:12px;">
+		{* {% if advert.image is not null %}
 			<img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" >
-		{% endif %}
-	  </p>
-	   <p> 
-			<a href="{{ path('oc_platform_view', {'id': advert.id}) }}" class="link-article">
-				{{ advert.title }}
-			</a>
-			 <span> par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }} /<span> <br />
-			<span style="color:red">Catégories :  </span>
-			{% for category in advert.categories %}
-				<b>{{ category.name }}</b> {% if not loop.last%}, {% endif %}
-			{% endfor %}
-			<br />
-			<span style="color:green">Compétences requises pour cette annonce :</span>
-			{% for adverskill in advert.advertskilles %}
-				<b>{{ adverskill.skill.name }}  -{{ adverskill.level }}-</b> {% if not loop.last%}, {% endif %}
-			{% endfor %}
-
-		</p>
-      </li>
+		{% endif %} *}
+	      </p>-->
+		<a href="{{ path('oc_platform_view', {'id': advert.id}) }}" class="link-article">{{ advert.title }} </a>
+                <span> par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }} /<span>
+		<span style="color:red">Catégories :  </span>
+		{% for category in advert.categories %}
+			<b>{{ category.name }}</b> {% if not loop.last%}, {% endif %}
+		{% endfor %}
+		<span style="color:green">Compétences requises pour cette annonce :</span>
+		{% for adverskill in advert.advertskilles %}
+			<b>{{ adverskill.skill.name }}  -{{ adverskill.level }}-</b> {% if not loop.last%}, {% endif %}
+		{% endfor %}
+	      </li>
     {% endfor %}
 	</ul>
 	<ul class="pagination">
@@ -43,4 +36,5 @@
 			</li>
 		{% endfor %}
 	</ul>
+	<p><strong>Vous pouvez aussi lister les offres à travers <a href="{{ path('oc_platform_datatable') }}">ce lien</a></strong></p>
 {% endblock %}

@@ -1,0 +1,32 @@
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+
+{% block ocplatform_body  %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.css"/>
+    {{ datatable_html({
+            'id' : 'dta-offres'
+        })
+    }}
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.js"></script>
+{{ datatable_js({
+        'id' : 'dta-offres',
+        'js' : {
+            'dom': '<"clearfix"lf>rtip',
+            'ajax': path('oc_platform_grid', {'slug': 'back'}),
+        }
+    })
+}}
+{% endblock javascripts %}
+
+
+
+
+
+
+

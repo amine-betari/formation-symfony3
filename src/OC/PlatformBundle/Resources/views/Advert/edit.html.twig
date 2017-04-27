@@ -7,15 +7,9 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-
-  <h2>Modifier une annonce</h2>
-
+  <h2>Modifier l'annonce</h2>
   {{ include("OCPlatformBundle:Advert:form.html.twig") }}
-
-  <p>
-    Vous éditez une annonce déjà existante, merci de ne pas changer
-    l'esprit général de l'annonce déjà publiée.
-  </p>
+  <p><strong> Vous éditez une annonce déjà existante, merci de ne pas changer  l'esprit général de l'annonce déjà publiée. </strong></p>
 
   <p>
     <a href="{{ path('oc_platform_view', {'id': advert.id}) }}" class="btn btn-default">

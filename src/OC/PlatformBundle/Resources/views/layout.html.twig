@@ -7,33 +7,27 @@
 {% endblock %}
 
 {% block right %}
-		<h3>Les annonces depuis le bundle PL</h3>
+	<!--<h3>Les annonces depuis le bundle PL</h3>-->
         <ul class="nav nav-pills nav-stacked">
-			
-          <li><a href="{{ path('amine_homepage') }}">{{ "Home"|trans }}</a></li>
-		  {% if is_granted("ROLE_ADMIN") %}
-			<li><a href="{{ path('oc_platform_add') }}">{{ "add.advert"|trans }}</a></li>
-			<li><a href="{{ path('oc_platform_add_skill') }}">{{ "Add Skill"|trans }}</a></li>
-			<li><a href="{{ path('oc_platform_list_skill') }}">{{ "List Skills"|trans }}</a></li>
-		  {% endif %}
-		  {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-				<!--Connecté en tant que {{ app.user.username }}-->
-			<li><a href="{{ path('fos_user_security_logout') }}">{{ "Déconnexion"|trans }}</a></li>
+	        <li><a href="{{ path('amine_homepage') }}">{{ "Home"|trans }}</a></li>
+		 {% if is_granted("ROLE_ADMIN") %}
+			 <li><a href="{{ path('oc_platform_add') }}">{{ "add.advert"|trans }}</a></li>
+			 <li><a href="{{ path('oc_platform_add_skill') }}">{{ "Add Skill"|trans }}</a></li>
+			 <li><a href="{{ path('oc_platform_list_skill') }}">{{ "List Skills"|trans }}</a></li>
+		 {% endif %}
+		 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+  			 <!--Connecté en tant que {{ app.user.username }}-->
+			 <li><a href="{{ path('fos_user_security_logout') }}">{{ "Déconnexion"|trans }}</a></li>
 		  {% else %}
-		    <li><a href="{{ path('fos_user_security_login') }}">{{ "Connexion"|trans }}</a></i>
-			<li><a href="{{ path('fos_user_registration_register') }}">{{ "Register"|trans }}</a></i>
+			 <li><a href="{{ path('fos_user_security_login') }}">{{ "Connexion"|trans }}</a></i>
+			 <li><a href="{{ path('fos_user_registration_register') }}">{{ "Register"|trans }}</a></i>
 			<!--<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>-->
-		  {% endif %}
-		  
+		 {% endif %}
         </ul>
 {% endblock %}	
 	
 {% block body %}
-
   {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
-  <h1>Annonces</h1>
-
-  <hr>
 
   {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
   {% block ocplatform_body %}

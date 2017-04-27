@@ -37,6 +37,10 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
+#sg_datatables_bundle:
+#    resource: "@SgDatatablesBundle/Controller/"
+#    type:     annotation	
+
 #login: 
 #    path: /login
 #    defaults:

@@ -8,23 +8,27 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\File\FileUploader;
 use OC\PlatformBundle\Email\ApplicationMailer;
+use Symfony\Bundle\TwigBundle\TwigEngine;
 
-class BrochureUploadListener
+class ApplicationCreationListener
 {
 	private $uploader;
 
-//	private $mailer;
+	private $mailer;
 	
-	public function __construct(FileUploader $uploader/*, ApplicationMailer $mailer*/) 
+	
+	public function __construct(FileUploader $uploader,  ApplicationMailer $mailer) 
 	{
 		$this->uploader = $uploader;
-//		$this->mailer = $mailer;
+		$this->mailer = $mailer;
+		
 	}
 
 	public function postPersist(LifecycleEventArgs $args) 
 	{
 		$entity = $args->getEntity();
-		exit;
+		if (! $entity instanceof Application )  return;
+		$this->mailer->sendNewNotification($entity);
 	}
 	public function prePersist(LifecycleEventArgs $args)
 	{
@@ -54,6 +58,7 @@ class BrochureUploadListener
 		$pathFile = $this->uploader->getTargetDir().'/'.$file;
 		if(file_exists($pathFile)) unlink($pathFile);
 	}
+	
 
 	public function uploadFile($entity)
 	{
@@ -62,14 +67,8 @@ class BrochureUploadListener
 		}
 		 $file = $entity->getBrochure();
 	        // only upload new filess
-                if (!$file instanceof UploadedFile) {
-        		return;
-                }
-
-                $fileName = $this->uploader->upload($file);
-                $entity->setBrochure($fileName);
-		// Send Mail to Admin to notify a new CV has receved
-		// $notify = $this->mailer->sendNewNotification($entity);
-		// $notify = $this->mailer->send($message);
+        if (!$file instanceof UploadedFile) return;
+        $fileName = $this->uploader->upload($file);
+        $entity->setBrochure($fileName);
 	}
 }

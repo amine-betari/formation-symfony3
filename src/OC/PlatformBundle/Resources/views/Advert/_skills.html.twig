@@ -1,0 +1,9 @@
+{% for category in dt_obj.categories %}
+	<a href="{{ path('oc_platform_category', {'name': category.name}) }}">{{ category.name }} </a> {% if not loop.last%}, {% endif %}
+{% endfor %}
+<br />
+{% for advertSkill in dt_obj.advertskilles %}
+	<li>{{ advertSkill.skill.name }} : niveau {{ advertSkill.level }}</li>
+{% endfor %}
+
+

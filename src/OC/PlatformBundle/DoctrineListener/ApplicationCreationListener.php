@@ -17,12 +17,12 @@ class ApplicationCreationListener
   public function __construct(ApplicationMailer $applicationMailer)
   {
     $this->applicationMailer = $applicationMailer;
-	exit;
   }
 
   // la méthode doit respecter le même nom que l'événement
   public function postPersist(LifecycleEventArgs $args)
   {
+	//exit;
     // l'objet LifecycleEventArgs offre deux méthodes : getObject et getObjectManager
     $entity = $args->getObject();
 

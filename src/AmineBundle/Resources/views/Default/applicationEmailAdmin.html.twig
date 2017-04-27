@@ -1,0 +1,6 @@
+{# src/Blogger/BlogBundle/Resources/view/Page/contactEmail.txt.twig #}
+
+A new application was posted by {{ application.author }} at {{ "now" | date("Y-m-d H:i") }}.
+<br /> 
+<hr />
+It concerns this Advert : <a href="{{ url('oc_platform_view', {'id': application.advert.id}) }}"> {{ application.advert.title }} </a>

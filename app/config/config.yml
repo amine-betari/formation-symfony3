@@ -10,6 +10,7 @@ imports:
 parameters:
     locale: fr
     brochures_directory: '%kernel.root_dir%/../web/uploads/brochures'
+    email: amine.betari@gmail.com
 
 framework:
     #esi:             ~
@@ -94,3 +95,11 @@ assetic:
         jsqueeze: ~
         scssphp:
             formatter: 'Leafo\ScssPhp\Formatter\Compressed'
+# config datables bundles
+waldo_datatable:
+    all: ~
+    js:
+        pageLength : "7"
+        lengthMenu: [[5,10 25, 50, -1], [5,10, 25, 50, 'All']]
+        dom: '<"clearfix"lf>rtip'
+        jQueryUI: "false"

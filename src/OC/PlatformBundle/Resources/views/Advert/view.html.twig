@@ -8,8 +8,8 @@
 
 {% block ocplatform_body %}
 
- {% if advert.image is not null %}
-	<img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" >
+  {% if advert.image is not null %}
+	<!-- <img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" > -->
   {% endif %}
   <h2>{{ advert.title }}</h2>
   <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
@@ -51,7 +51,7 @@
   </div>
 
   <p>
-    <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
+    <a href="{{ path('oc_platform_admin_datatable') }}" class="btn btn-default">
       <i class="glyphicon glyphicon-chevron-left"></i>
       Retour à la liste
     </a>
@@ -66,11 +66,23 @@
   </p>
 {% else %}
 	<div class="well">
-		<h3>Déposer Votre candidature Ici</h3>
-		{{ form_start(form) }}
-		{{ form_widget(form) }}
-		{{ form_end(form) }}
+		{% if anonymous == 1 %}
+			<h3>Déposer Votre candidature Ici</h3>
+			 {% if app.session.flashBag.has('noticeA') %}
+				<div class="alert alert-success">
+					{% for msg in app.session.flashBag.get('noticeA') %}
+						{{ msg }}
+					{% endfor %}
+				</div>
+			{% endif %}
 
+			{{ form_start(form) }}
+			{{ form_widget(form) }}
+			{{ form_end(form) }}
+		{% else %}
+			<p>Vous devez créer un compte afin de pouvoir postuler <a href="{{ path('fos_user_registration_register') }}" class="">{{ "Register"|trans }}</a></p>
+			<p> Sinon si vous avez déja un compte, merci de <a href="{{ path('fos_user_security_login') }}">{{ "Connexion"|trans }}</a></p>
+		{% endif %}
 	</div>
 {% endif %}
 {% endblock %}

@@ -1,0 +1,14 @@
+body {
+	background: #f7f7f7;
+}
+#content{
+	BACKGROUND: #f3f1f2;
+}
+
+h2, h3, a, .val, .val-v1, .back-to-top, .lg-tabs li a:hover, .lg-tabs li.active a, .content-box h4, .icon-u, .dark-icons i:hover, .circle-icons i, .i-primary i, .primary span, .features-list i  {
+	color: #1eb9c1;
+}
+
+.btn-default {
+	 background-color: #1eb9c1;
+}
