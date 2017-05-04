@@ -11,20 +11,20 @@
 
 <div class="blogger-notice">
   {% for flashMessage in app.session.flashbag.get('contact') %}
-			<p class="message-contact">	{{ flashMessage }} </p>
+		<div class="alert alert-success">	{{ flashMessage }} </div>
   {% endfor %}
 </div>
 <div class="well">
 	{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 	
-	{# Les erreurs générales du formulaire. #}
+	{# Les erreurs generales du formulaire. #}
 	{{ form_errors(form) }}
 	
 	{# Rendu formulaire #}
 	{{ form_widget(form) }}
 	{# Rendu formulaire #}
 	
-	    <input id="submit" class="submit" value="Valider" type="submit" />
+	    <input id="submit" class="btn btn-default submit" value="Valider" type="submit" />
 
 	{{ form_rest(form) }}
 

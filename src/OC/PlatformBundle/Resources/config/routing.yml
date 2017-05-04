@@ -16,9 +16,11 @@ oc_platform_view_skill:
     requirements:
         id: \d+
 oc_platform_category:
-    path: /category/{name}		
+    path: /category/{id}		
     defaults: 
-        _controller: OCPlatformBundle:Advert:listadvertbycategory
+        _controller: OCPlatformBundle:Advert:listAdvertByCategory
+    requirements:
+        id: \d+
 oc_platform_delete_application:
     path: /delete-application/{id}		
     defaults:

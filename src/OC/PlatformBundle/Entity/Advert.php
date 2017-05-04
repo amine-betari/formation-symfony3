@@ -393,15 +393,17 @@ class Advert
         return $this->nbApplications;
     }
 	
-	
-	public function increaseApplication(){
-		$this->nbApplications++;
-	}
-	
-	
-	public function decreaseApplication(){
-		$this->nbApplications--;
-	}
+    
+    public function increaseApplication()
+    {
+	$this->nbApplications++;
+    }
+
+
+     public function decreaseApplication()
+     {
+	$this->nbApplications--;
+     }
 
     /**
      * Set slug
@@ -427,30 +429,7 @@ class Advert
         return $this->slug;
     }
 
-	
-	// public function getSkill()
-    // {
-        // $skills = new ArrayCollection();
-        
-        // foreach($this->advertskilles as $as)
-        // {
-            // $skills[] = $as->getSkill();
-        // }
-        // return $skills;
-    // }
-	
-	
-    // public function setSkill($skills)
-    // {
-        // foreach($skills as $s)
-        // {
-            // $advertskilles = new AdvertSkill();
-            // $advertskilles->setAdvert($this);
-            // $advertskilles->setSkill($s);
-			// $advertskilles->setLevel('Expert');
-            // $this->addAdvertskille($advertskilles);
-        // }
-    // }
+
     /**
      * Add advertskille
      *

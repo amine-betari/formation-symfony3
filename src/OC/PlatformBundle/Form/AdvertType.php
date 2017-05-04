@@ -88,10 +88,10 @@ class AdvertType extends AbstractType
 		
 		// On ajoute une fonction qui va écouter un événement 
 		$builder->addEventListener(
-			FormEvents::PRE_SET_DATA, // 1er argument : l'événement qui nous intéresse,
-									  // Cet événement est déclenché just avant que les champs ne soient pas remplis avec les valeurs de l'objet
+			FormEvents::PRE_SET_DATA, // 1er argument : l'evenement qui nous interesse,
+			  // Cet evenement est declenche just avant que les champs ne soient pas remplis avec les valeurs de l'objet
 			function(FormEvent $event) { // 2eme argument, la fonction à exécuter lorsque l'evenment est délenché
-				// On récupère notre objet Advert sous-jacent
+				// On recupere notre objet Advert sous-jacent
 				$advert = $event->getData();
 				if($advert === null) {
 					return;

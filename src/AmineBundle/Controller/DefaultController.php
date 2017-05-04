@@ -21,14 +21,14 @@ class DefaultController extends Controller
      */	 
     public function indexAction()
     {
-		// Get service Doctrine
-		$doctrine = $this->get('doctrine');
-		// Get EM
-		$em = $doctrine->getManager();
-		// Get repositories 
-		$repository = $em->getRepository('OCPlatformBundle:Advert');
-		$listAdverts = $repository->findAll();
-        return $this->render('AmineBundle:Default:index.html.twig', array('listAdverts' => $listAdverts));
+	// Get service Doctrine
+	$doctrine = $this->get('doctrine');
+	// Get EM
+	$em = $doctrine->getManager();
+	// Get repositories 
+	$repository = $em->getRepository('OCPlatformBundle:Category');
+	$listCategories = $repository->findAll();
+        return $this->render('AmineBundle:Default:index.html.twig', array('listCategories' => $listCategories));
     }
 	
 	

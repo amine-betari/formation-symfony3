@@ -22,11 +22,10 @@
 
 <body>
   <div class="container">
-    <div id="header" class="jumbotron">
-     <center> <h1>Plateforme d'annonces AS</h1> </center>
-      <p></p>
-    </div>
-
+   <div id="header" class="jumbotron" style="background-image:none;">
+	  <img src="{{ asset('bundles/amine/img/logo.png') }}" />		
+ 	  <center> <h1>Plateforme d'annonces AS</h1> </center>
+   </div>
     <div class="row">
       <div id="menu" class="col-md-3">
 		{% block right %}
@@ -54,7 +53,6 @@
       <p>The sky's the limit © {{ 'now'|date('Y') }} and beyond.</p>
     </footer>
   </div>
-
   {% block javascripts %}
     {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
