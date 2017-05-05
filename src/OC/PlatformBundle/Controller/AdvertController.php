@@ -185,9 +185,9 @@ class AdvertController extends Controller
 	public function indexAction($page)
 	{
 		// Use Monolog
-		$logger = $this->get('logger');
-		$logger->info('Tout va bien, je suis en version 3.1.0');
-		$logger->critical('Mais il m\'enerve ');
+//		$logger = $this->get('logger');
+//		$logger->info('Tout va bien, je suis en version 3.1.0');
+//		$logger->critical('Mais il m\'enerve ');
 		// Use Monolog	
 		//if ($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
 		
