@@ -12,7 +12,7 @@ class LoadSkill implements FixtureInterface
   public function load(ObjectManager $manager)
   {
     // Liste des noms de compétences à ajouter
-    $names = array('PHP', 'Symfony', 'C++', 'Java', 'Photoshop', 'Blender', 'EzPublish');
+    $names = array('PHP', 'Symfony', 'Drupal', 'Wordpress', 'C++', 'Java', 'C', 'Zend', 'EzPublish');
 
     foreach ($names as $name) {
       // On crée la compétence

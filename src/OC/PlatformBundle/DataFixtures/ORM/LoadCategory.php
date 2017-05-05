@@ -17,7 +17,8 @@ class LoadCategory implements FixtureInterface
       'Développement mobile',
       'Graphisme',
       'Intégration',
-      'Réseau'
+      'Réseau',
+      'DevOps'
     );
 
     foreach ($names as $name) {
