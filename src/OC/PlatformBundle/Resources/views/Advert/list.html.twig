@@ -7,17 +7,15 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-	<h2>Liste des annonces pour la catégorie : {{ name }}</h2>
-	<ul>
+   <h2>Liste des annonces pour la catégorie : {{ name }}</h2>
+   <ul class="list-group">
     {% for advert in listAdverts %}
-      <li>
-        <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
-          {{ advert.title }}
-        </a>
+      <li class="list-group-item list-group-item-info">
+        <a href="{{ path('oc_platform_view', {'id': advert.id}) }}"> {{ advert.title }}  </a>
         par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}, updated le {{ advert.updatedAt|date('d/m/Y') }}
       </li>
     {% else %}
       <li>Pas (encore !) d'annonces</li>
     {% endfor %}
-	</ul>
+   </ul>
 {% endblock %}

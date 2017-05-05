@@ -19,7 +19,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-//use OC\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Monolog\Logger;
 
@@ -44,9 +43,10 @@ class AdvertController extends Controller
                             ->setEntity('OCPlatformBundle:Advert', 'a')
                             ->setFields(
                                 array(
-                                        "Name"   	=> "a.title",
+	                                "Name"		   	=> "a.title",
+					"Nombre postulé"        => "a.nbApplications",
 			                "Compétences demandées" => "a.published",
-					"Actions" 	=> "a.date",
+					"Actions" 		=> "a.title",
                                         "_identifier_" => "a.id")
                                 )
                              ->setRenderers(
@@ -54,10 +54,10 @@ class AdvertController extends Controller
                                         0 => array(
 					        'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
                                         ),
-                                        1 => array(
+                                        2 => array(
 						'view' => 'OCPlatformBundle:Advert:_skills.html.twig'
 					),
-					2 => array(
+					3 => array(
 						'view' => 'OCPlatformBundle:Advert:_actions_admin.html.twig'
 					),
                                     )
@@ -159,13 +159,10 @@ class AdvertController extends Controller
 			$advertskill = $repository->findOneBy(array('advert' => (int)$idAdvert, 'skill' => (int)$idSkill ));
 			// Delete this relation
 			$advert->removeAdvertskille($advertskill);
-//			$em->persist($advert);
-//			$em->remove($advertskill);
-//			$em->flush();
-//			$em->refresh($advert);
 			return new JsonResponse(array('data' => array($advertskill)));
 		}
 	}
+
 
 
 	public function translationAction($name) 
@@ -174,6 +171,8 @@ class AdvertController extends Controller
 			'name' => $name
 		));
 	}
+
+
 	public function purgeAction($days)
 	{
 		$purge = $this->container->get('oc_platform.purger.advert');
@@ -182,36 +181,13 @@ class AdvertController extends Controller
 	}
 	
 	
-	public function testAction($id)
-	{
-		$advert = new Advert;
-		$advert->setTitle("Recherche développeur !");
-		$advert->setAuthor("A");
-		$advert->setContent("Recherche développeur !");
-		
-		// On récupère le service validator
-		$validator = $this->get('validator');
-		
-		// On déclenche la validation sur notre objet
-		/*$listErrors = $validator->validate($advert);
-		
-		if(count($listErrors) > 0) {
-			return new Response((string) $listErrors);
-		} else {*/
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($advert);
-			$em->flush(); // c'est à ce moment qu'est généré le slug
-			return new Response('<h1>Slug généré : </h1>'.$advert->getSlug());
-		//}
-		
-	}
 	
-    public function indexAction($page)
-    {
+	public function indexAction($page)
+	{
 		// Use Monolog
-		$logger = $this->get('logger');
-		$logger->info('Tout va bien, je suis en version 3.1.0');
-		$logger->critical('Mais il m\'enerve ');
+//		$logger = $this->get('logger');
+//		$logger->info('Tout va bien, je suis en version 3.1.0');
+//		$logger->critical('Mais il m\'enerve ');
 		// Use Monolog	
 		//if ($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
 		
@@ -240,10 +216,10 @@ class AdvertController extends Controller
 			'nbPages' => $nbPages,
 			'page' => $page,
 		));
-    }
+	}
 
 
-    public function viewAction(Request $request, Advert $advert) 
+	public function viewAction(Request $request, Advert $advert) 
 	{
 	
 	// Grâce à cette signature Advert $advert, nous venons d'économiser :
@@ -346,7 +322,7 @@ class AdvertController extends Controller
 			// On lié  l'image à l'annonce
 			$advert->setImage($image);*/
 			// GE
-				// On récupère ce qui a été modifié par le ou les listeners, ici le message
+			// On récupère ce qui a été modifié par le ou les listeners, ici le message
 			// GE
 			$advert->setContent($event->getMessage());
 			// Get Data of AdvertSKill from Form
@@ -502,15 +478,16 @@ class AdvertController extends Controller
     }
 
 	
-	public function listadvertbycategoryAction($name)
+	public function listAdvertByCategoryAction($id)
 	{
 		$em = $this->get('doctrine')->getManager();
-		$listAdverts = $em->getRepository('OCPlatformBundle:Advert')->getAdvertWithCategories($name);
+		$listAdverts = $em->getRepository('OCPlatformBundle:Advert')->getAdvertWithCategories($id);
 		if($listAdverts === null) {
 				throw new NotFoundHttpException("Les annones n'existe pas.");
 		}
-		
-		return $this->render('OCPlatformBundle:Advert:list.html.twig', array('listAdverts' => $listAdverts, 'name' => $name));
+		// CategoryName
+		$category =  $em->getRepository('OCPlatformBundle:Category')->find($id);
+		return $this->render('OCPlatformBundle:Advert:list.html.twig', array('listAdverts' => $listAdverts, 'name' => $category->getName()));
 		
 	}
 	

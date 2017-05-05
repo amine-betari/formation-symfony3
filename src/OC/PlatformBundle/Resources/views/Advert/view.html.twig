@@ -19,7 +19,7 @@
 		<p>
 			Cette Annonce est parue dans les catégories suivantes :
 			{% for category in advert.categories %}
-				<b><a href="{{ path('oc_platform_category', {'name': category.name}) }}">{{ category.name }} </a> {% if not loop.last%}, {% endif %}</b>
+				<b><a href="{{ path('oc_platform_category', {'id': category.id}) }}">{{ category.name }} </a> {% if not loop.last%}, {% endif %}</b>
 			{% endfor %}
 		</p>
 	{% endif %}

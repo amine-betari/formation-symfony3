@@ -12,3 +12,11 @@ h2, h3, a, .val, .val-v1, .back-to-top, .lg-tabs li a:hover, .lg-tabs li.active 
 .btn-default {
 	 background-color: #1eb9c1;
 }
+#header > img {
+    height: 100px;
+    float: left;
+}
+
+#content > h2 {
+	margin-top: 10px;	
+}
