@@ -116,7 +116,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
 	}
 	
 	
-	public function getAdvertWithCategories(int $categoryId){
+	public function getAdvertWithCategories($categoryId){
 		$qb = $this->createQueryBuilder('a');
 		//$qb->innerJoin('a.categories','cat','WITH','cat.name = "'.$categoryName.'"')->addSelect('cat');
 		$qb->innerJoin('a.categories','cat')->addSelect('cat');
