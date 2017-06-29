@@ -473,7 +473,7 @@ class AdvertController extends Controller
 		$em = $doctrine->getManager();
 		// Get repositories 
 		$repository = $em->getRepository('OCPlatformBundle:Advert');
-		$listAdverts = $repository->findBy(array(), array('date' => 'desc'), $limit, 0);
+		$listAdverts = $repository->findBy(array('published' => true), array('date' => 'desc'), $limit, 0);
 		return $this->render('OCPlatformBundle:Advert:menu.html.twig', array('listAdverts' => $listAdverts));
     }
 
