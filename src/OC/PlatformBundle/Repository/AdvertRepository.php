@@ -54,6 +54,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
 		$queryBuilder = $queryBuilder->leftJoin('a.advertskilles','advskil')->addSelect('advskil');
 		// Jointure sur l'attribut skill de l'entité advert skill, Moins de 7 requtes avec le même code dans twig
 		$queryBuilder = $queryBuilder->leftJoin('advskil.skill','skill')->addSelect('skill');
+		$queryBuilder = $queryBuilder->where('a.published = :published')->setParameter('published', true);
 		$queryBuilder->orderBy('a.date','DESC');
 		// get Query à partir du QueryBuider
 		$query = $queryBuilder->getQuery();
