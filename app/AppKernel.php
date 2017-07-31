@@ -15,7 +15,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AppBundle\AppBundle(),
+//            new AppBundle\AppBundle(),
             new OC\PlatformBundle\OCPlatformBundle(),
             new AmineBundle\AmineBundle(),
 	    //	new Doctrine\Bundle\FixturesBundles\DoctrineFixturesBundle(),
@@ -26,6 +26,8 @@ class AppKernel extends Kernel
 	    new Symfony\Bundle\AsseticBundle\AsseticBundle(),
 	    //      new Sg\DatatablesBundle\SgDatatablesBundle(),
 	    new Waldo\DatatableBundle\WaldoDatatableBundle(),
+	    new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

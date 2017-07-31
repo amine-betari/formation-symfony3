@@ -121,4 +121,10 @@ class AdvertSkill
         return $this->skill;
     }
 
+
+    public function __toString()
+    {
+	return $this->level; // <-- add here a real property which
+    }
+
 }

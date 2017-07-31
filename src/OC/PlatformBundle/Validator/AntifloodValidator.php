@@ -12,8 +12,8 @@ class AntifloodValidator extends ConstraintValidator
 	private $requestStack;
 	private $em;
 	
-	// Les arguments déclarés dans la définition du service arrivent au contrucuteur
-	// On doit les enregistrer dans l'objet pour pouvoir s'en resservir dans la méthode validate()
+	// Les arguments declares dans la definition du service arrivent au contrucuteur
+	// On doit les enregistrer dans l'objet pour pouvoir s'en resservir dans la methode validate()
 	public function __construct(RequestStack $requestStack, EntityManagerInterface $em)
 	{
 		$this->requestStack = $requestStack;
@@ -23,19 +23,6 @@ class AntifloodValidator extends ConstraintValidator
 	
 	public function validate($value, Constraint $constraint)
 	{
-		// Pour récupérer l'objet Request tel qu'on le connait, il faut
-		// utiliser getCurrentRequest du service request_stack
-		$request = $this->requestStack->getCurrentRequest();
-		// On récupère l'IP de celui qui poste
-		$ip = $request->getClientIp();
-		
-		// On vérifie si cette IP a déjà posté une candidature il y a moins de 15 secondes
-		/*$isFlood = $this->em
-			->getRepository('OCPlatformBundle:Application')
-			->isFlood($ip, 15);
-			
-		if($isFlood) {
-			$this->context->addViolation($constraint->message);
-		}*/
+	
 	}
 }

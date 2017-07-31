@@ -36,6 +36,10 @@ class Skill
 	 
 
 
+    public function getPhone()
+    {
+	return $this->getName();
+    }
     /**
      * Get id
      *

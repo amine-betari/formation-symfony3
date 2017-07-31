@@ -58,7 +58,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
 		$queryBuilder->orderBy('a.date','DESC');
 		// get Query à partir du QueryBuider
 		$query = $queryBuilder->getQuery();
-		// Pagination 
+		// Pagination
 		$query
 			// On définit l'annonce à partir de laquelle commencer la liste
 		->setFirstResult(($page-1) * $nbPerPage)

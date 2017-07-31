@@ -21,7 +21,7 @@ class Contact
   protected $email;
 
   /**
-   * @Assert\Length(min=10, minMessage="Le texte doit faire au moins {{ limit }} caractères.")
+   * @Assert\Length(min=5, minMessage="Le texte doit faire au moins {{ limit }} caractères.")
    * @Assert\NotBlank()
    */
   protected $subject;

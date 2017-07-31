@@ -4,3 +4,6 @@ amine_homepage:
 amine_contact:
     path: /nous-contacter
     defaults: { _controller: AmineBundle:Default:contact }	
+amine_page:
+    path: /page/{slug}
+    defaults: { _controller: AmineBundle:Default:page}
