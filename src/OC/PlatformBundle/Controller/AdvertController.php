@@ -114,7 +114,7 @@ class AdvertController extends Controller
 	/**
 	 * @ParamConverter("json")
 	 */
-	public function ParamConverterAction($json)
+	public function paramConverterAction($json)
 	{
 		return new Response(print_r($json, true));
 	}
@@ -184,13 +184,7 @@ class AdvertController extends Controller
 	
 	public function indexAction($page)
 	{
-		// Use Monolog
-//		$logger = $this->get('logger');
-//		$logger->info('Tout va bien, je suis en version 3.1.0');
-//		$logger->critical('Mais il m\'enerve ');
-		// Use Monolog	
-		//if ($page < 1) throw $this->createNotFoundException("La page ".$page." n'existe pas.");
-		
+	
 		$url = $this->get('router')->generate(
 			'oc_platform_view', // name of route
 			 array('id' => 5), //  les valeurs des paramètres

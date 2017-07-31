@@ -83,5 +83,4 @@
 			<formatter type="checkstyle" outfile="${project.basedir}/build/logs/checkstyle.xml"/>
 		</phpcodesniffer>
 	</target>
-
 </project>

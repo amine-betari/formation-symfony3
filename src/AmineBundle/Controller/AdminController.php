@@ -18,16 +18,11 @@ class AdminController extends BaseAdminController
     protected $request;
     /** @var EntityManager The Doctrine entity manager for the current entity */
     protected $em;
-	
-	protected function listUserAction()
-	{
-		exit;
-	}
+
 
     public function createNewUserEntity()
     {
-	//	exit;
-        return $this->get('fos_user.user_manager')->createUser();
+       return $this->get('fos_user.user_manager')->createUser();
     }
 
 

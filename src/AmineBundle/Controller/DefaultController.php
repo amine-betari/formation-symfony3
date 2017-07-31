@@ -16,11 +16,11 @@ class DefaultController extends Controller
 {
 	private $doctrine;
 	private $em;
-	/**
-	 * Get the 3 latest adverts
-	 * @param
-	 * @return 
-     */	 
+     /**
+      * Get the 3 latest adverts
+      * @param
+      * @return 
+      */	 
     public function indexAction()
     {
 	// Get service Doctrine
@@ -39,9 +39,6 @@ class DefaultController extends Controller
 	 * 
 	 */
 	public function contactAction(Request $request) {
-		/*$session = $request->getSession();
-        $session->getFlashBag()->add('contact', 'La page de contact n’est pas encore disponible. Merci de revenir plus tard');
-		return $this->redirectToRoute('amine_homepage');*/
 		$contact = new Contact;
 		$form = $this->get('form.factory')->create(ContactType::class, $contact);
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
@@ -71,7 +68,6 @@ class DefaultController extends Controller
 	public function pageAction($slug, Request $request)
 	{
 		if ($slug == "nous-contacter") {
-			//$url = $this->get('router')->generate('oc_platform_home');
 			return $this->redirectToRoute('amine_contact');
 		}
 		$this->doctrine = $this->get('doctrine');
