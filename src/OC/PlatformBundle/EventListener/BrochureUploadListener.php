@@ -13,19 +13,12 @@ class BrochureUploadListener
 {
 	private $uploader;
 
-//	private $mailer;
-	
-	public function __construct(FileUploader $uploader/*, ApplicationMailer $mailer*/) 
+	public function __construct(FileUploader $uploader) 
 	{
 		$this->uploader = $uploader;
-//		$this->mailer = $mailer;
 	}
 
-	public function postPersist(LifecycleEventArgs $args) 
-	{
-		$entity = $args->getEntity();
-		exit;
-	}
+
 	public function prePersist(LifecycleEventArgs $args)
 	{
 		$entity = $args->getEntity();
@@ -68,8 +61,5 @@ class BrochureUploadListener
 
                 $fileName = $this->uploader->upload($file);
                 $entity->setBrochure($fileName);
-		// Send Mail to Admin to notify a new CV has receved
-		// $notify = $this->mailer->sendNewNotification($entity);
-		// $notify = $this->mailer->send($message);
 	}
 }

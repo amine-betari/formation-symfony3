@@ -463,6 +463,11 @@ class Advert
     {
         return $this->advertskilles;
     }
+
+	public function __toString()
+	{
+		return $this->title; // <-- add here a real property which
+	}
 	
 	
 	/**

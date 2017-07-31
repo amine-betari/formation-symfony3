@@ -193,4 +193,10 @@ class Image
     {
         return $this->alt;
     }
+
+
+    public function __toString()
+    {
+	return $this->alt; // <-- add here a real property which
+    }
 }

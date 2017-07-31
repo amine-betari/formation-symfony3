@@ -2,6 +2,11 @@ amine:
     resource: "@AmineBundle/Resources/config/routing.yml"
     # prefix:   /{_locale}
 
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/AdminController.php"
+    type: annotation
+    prefix: /admin
+
 # hwi_oauth_redirect:
     # resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     # prefix:   /connect
@@ -33,9 +38,9 @@ oc_platform:
     resource: "@OCPlatformBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/platform
 
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+#app:
+#    resource: "@AppBundle/Controller/"
+#    type:     annotation
 
 #sg_datatables_bundle:
 #    resource: "@SgDatatablesBundle/Controller/"

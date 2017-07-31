@@ -16,10 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use OC\PlatformBundle\Repository\CategoryRepository;
 use OC\PlatformBundle\Form\CkeditorType;
-//use Symfony\Component\Form\Extension\Core\Type\SkillType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-//use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 
 class AdvertType extends AbstractType
@@ -97,8 +95,6 @@ class AdvertType extends AbstractType
 					return;
 				}
 				
-				// Si l'annonce n'est pas publiée
-				//echo 'IDAdvert'; var_dump($advert->getId());
 				if(!$advert->getPublished() || null === $advert->getId()) {
 					$event->getForm()->add('published', CheckboxType::class, array('required' => false));
 				} else {
