@@ -38,7 +38,8 @@
         "patchwork/jsqueeze": "dev-master",
 		"coresphere/console-bundle": "~0.4",
 
-        "waldo/datatable-bundle": "^4.0"
+        "waldo/datatable-bundle": "^4.0",
+        "javiereguiluz/easyadmin-bundle": "^1.16"
 
     },
     "require-dev": {
