@@ -14,7 +14,7 @@ class JsonParamConverter implements ParamConverterInterface
   // $configuration->getClass() : le typage de l'argument dans la méthode du contrôleur
   // $configuration->getName() : le nom de l'argument dans la méthode du contrôleur
   // $configuration->getOptions() : les options de l'annotation, si elles sont explicitées (vide bien sur lorsqu'il n'y a pas l'annotation
-  function supports(ParamConverter $configuration)
+ public  function supports(ParamConverter $configuration)
   {
 	// Si le nom de l'argument du contrôleur n'est pas "json", on n'applique pas le convertisseur
 	if ('json' !== $configuration->getName()) {
@@ -25,7 +25,7 @@ class JsonParamConverter implements ParamConverterInterface
 
   
   // Cette méthode doit créer un attribut de requête, qui sera injecté dans l'argument de la méthode du contrôleur
-  function apply(Request $request, ParamConverter $configuration)
+ public  function apply(Request $request, ParamConverter $configuration)
   {
 	
 	// On récupère la valeur actuelle de l'attribut
