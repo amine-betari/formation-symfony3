@@ -18,10 +18,10 @@
 		 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
   			 <!--Connecté en tant que {{ app.user.username }}-->
 			 <li><a href="{{ path('fos_user_security_logout') }}">{{ "Déconnexion"|trans }}</a></li>
+			 <li><a href="{{ path('fos_user_profile_edit') }}">{{ "Edit Your Profil"|trans }}</a></li>
 		  {% else %}
 			 <li><a href="{{ path('fos_user_security_login') }}">{{ "Connexion"|trans }}</a></i>
 			 <li><a href="{{ path('fos_user_registration_register') }}">{{ "Register"|trans }}</a></i>
-			<!--<div class="fb-like" data-share="true" data-width="450" data-show-faces="true"></div>-->
 		 {% endif %}
         </ul>
 {% endblock %}	
