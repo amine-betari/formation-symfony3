@@ -141,6 +141,16 @@ easy_admin:
             class: OC\PlatformBundle\Entity\Category
         User:
             class: OC\UserBundle\Entity\User
+            form:
+                fields:
+                    - username
+                    - email
+                    - roles
+                    - enabled
+                    - lastLogin
+                    # if administrators are allowed to edit users passwords and roles, add this
+#                    - { property: 'plainPassword', type: 'text', type_options: { required: false } }
+                    - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN' } } }
         Advert:
             class: OC\PlatformBundle\Entity\Advert
             list:

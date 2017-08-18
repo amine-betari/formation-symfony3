@@ -7,13 +7,6 @@ easy_admin_bundle:
     type: annotation
     prefix: /admin
 
-# hwi_oauth_redirect:
-    # resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-    # prefix:   /connect
- 
-# hwi_oauth_login:
-    # resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
-    # prefix:   /login	
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
     prefix: /{_locale}/
@@ -37,20 +30,3 @@ fos_user_change_password:
 oc_platform:
     resource: "@OCPlatformBundle/Resources/config/routing.yml"
     prefix:   /{_locale}/platform
-
-#app:
-#    resource: "@AppBundle/Controller/"
-#    type:     annotation
-
-#sg_datatables_bundle:
-#    resource: "@SgDatatablesBundle/Controller/"
-#    type:     annotation	
-
-#login: 
-#    path: /login
-#    defaults:
-#        _controller: OCUserBundle:Security:login		
-#login_check:
-#    path: /login_check	
-#logout:
-#    path: /logout
