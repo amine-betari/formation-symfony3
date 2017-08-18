@@ -93,6 +93,8 @@ fos_user:
 assetic:
     debug:          '%kernel.debug%'	
     use_controller: '%kernel.debug%'
+    bundles:
+        - SecurityBundle
     filters:
         cssrewrite: ~
         jsqueeze: ~
