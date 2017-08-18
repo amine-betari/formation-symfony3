@@ -94,7 +94,10 @@ assetic:
     debug:          '%kernel.debug%'	
     use_controller: '%kernel.debug%'
     bundles:
-        - SecurityBundle
+        - OCPlatformBundle
+        - AmineBundle
+        - EasyAdminBundle
+        - IvoryCKEditorBundle
     filters:
         cssrewrite: ~
         jsqueeze: ~
