@@ -1,12 +1,4 @@
 services:
-#    oc_platform.example:
-#        class: OC\PlatformBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
-#    oc_platform.form.type.user:
-#        class: OC\PlatformBundle\Form\AdvertType
-#        arguments: ["@security.token_storage"]
-#        tags:
-#            - { name: form.type }
     oc_platform.antispam:
         class: OC\PlatformBundle\Antispam\OCAntispam
         arguments:

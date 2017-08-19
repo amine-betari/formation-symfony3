@@ -86,6 +86,9 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: OC\UserBundle\Entity\User
+    registration: 
+        form:
+            type: OC\UserBundle\Form\RegistrationType
     from_email:
         address: amine.betari@gmail.com
         sender_name: Formation Symfony3	

@@ -10,7 +10,7 @@
 	<!--<h3>Les annonces depuis le bundle PL</h3>-->
         <ul class="nav nav-pills nav-stacked">
 	        <li><a href="{{ path('amine_homepage') }}">{{ "Home"|trans }}</a></li>
-		 {% if is_granted("ROLE_ADMIN") %}
+		 {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_RECRUTEUR") %}
 			 <li><a href="{{ path('oc_platform_add') }}">{{ "add.advert"|trans }}</a></li>
 			 <li><a href="{{ path('oc_platform_add_skill') }}">{{ "Add Skill"|trans }}</a></li>
 			 <li><a href="{{ path('oc_platform_list_skill') }}">{{ "List Skills"|trans }}</a></li>

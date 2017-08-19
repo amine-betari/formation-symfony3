@@ -25,9 +25,97 @@ class User extends BaseUser
      */
     protected $id;
 	
+	
+	/**
+	 * @ORM\Column(name="nom", type="string", length=255)
+	 */
+	protected $nom;
+	
+	/**
+	 * @ORM\Column(name="prenom", type="string", length=255)
+	 */
+	protected $prenom;
+	
+	/**
+	 * @ORM\Column(name="mode", type="string", length=255)
+	 */
+	protected $mode;
+	
     public function __construct()
     {
 	parent::__construct();
 	// your own logic
     } 	
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return User
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     *
+     * @return User
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * Get prenom
+     *
+     * @return string
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * Set mode
+     *
+     * @param string $mode
+     *
+     * @return User
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+
+        return $this;
+    }
+
+    /**
+     * Get mode
+     *
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
 }

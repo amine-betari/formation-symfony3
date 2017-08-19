@@ -41,8 +41,8 @@ class AdvertType extends AbstractType
 					]
 				] )
 			  ->add('title',     TextType::class)
-			  //->add('content',   TextareaType::class)
-			  ->add('content',   CkeditorType::class, array('attr' => array('class' => 'ckeditor')))
+			  ->add('content',   TextareaType::class)
+			  //->add('content',   CkeditorType::class, array('attr' => array('class' => 'ckeditor')))
 			  ->add('author',    TextType::class, array('data' => $options['user']))
 			  //->add('published', CheckboxType::class, array('required' => false))
 			  ->add('image', ImageType::class, array('required' => false)) // ImageType est un formulaire

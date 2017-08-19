@@ -6,7 +6,9 @@ security:
         Symfony\Component\Security\Core\User\User: plaintext
         OC\UserBundle\Entity\User: sha512
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_AUTEUR, ROLE_MODERATEUR]
+        ROLE_RECRUTEUR: [ROLE_AUTEUR, ROLE_RECRUTEUR]
+        ROLE_CANDIDAT: [ROLE_CANDIDAT]
+        ROLE_ADMIN: [ROLE_AUTEUR, ROLE_MODERATEUR, ROLE_RECRUTEUR, ROLE_CANDIDAT]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
