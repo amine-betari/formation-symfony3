@@ -43,14 +43,14 @@ class AdvertType extends AbstractType
 			  ->add('title',     TextType::class)
 			  ->add('descriptif',   TextareaType::class)
 			  ->add('profil',   TextareaType::class)
-			  ->add('author',    EntityType::class, array(
-						'class'         => 'OCUserBundle:User',
-						'data' => $options['user'],
-						'multiple'      => false,
-					))
+//			  ->add('author',    EntityType::class, array(
+//						'class'         => 'OCUserBundle:User',
+//						'data' => $options['user'],
+//						'multiple'      => false,
+//					))
 			  ->add('salaire',     TextType::class)
 			  ->add('ville',     TextType::class)
-			  ->add('image', ImageType::class, array('required' => false)) // ImageType est un formulaire
+			  //->add('image', ImageType::class, array('required' => false)) // ImageType est un formulaire
                   	  ->add('categories', CollectionType::class, array(
 						  'entry_type'   => CategoryType::class,
 						  'allow_add'    => true,
@@ -94,6 +94,19 @@ class AdvertType extends AbstractType
 				}
 			}
 		);
+		// 2eme evenement, setter current user
+		$builder->addEventListener(
+			FormEvents::SUBMIT,
+			function(FormEvent $event) {
+				 $advert = $event->getData();
+                                if($advert === null) {
+                                        return;
+                                }
+				$options = $event->getForm()->getConfig()->getOptions();
+				$user =  $options['user'];
+				$advert->setAuthor($user); 
+			}
+		);
     }
     
     /**
@@ -107,3 +120,4 @@ class AdvertType extends AbstractType
         ));
     }
 }
+

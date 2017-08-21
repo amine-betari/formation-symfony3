@@ -34,7 +34,7 @@
 	{% endif %}
 
   </div>
-{% if is_granted('ROLE_ADMIN') %}
+{% if is_granted('ROLE_ADMIN') or is_granted("ROLE_RECRUTEUR") %}
   <div class="well">
 	<h3>Liste des candidatures</h3>
 	<ul>

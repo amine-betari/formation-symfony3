@@ -57,17 +57,17 @@
 		{# {% form_theme form 'AmineBundle:Form:fields.html.twig' %} #}
 		{# {{ form_row(form.nbApplications)}} #}
 
-		{{ form_row(form.author) }}
+		{# {{ form_row(form.author) }} #}
 		{% if form.pubished is defined %}
 			{{ form_row(form.published) }}
 		{% endif %}
 		<div class="well"> 
-			{{ form_row(form.image) }} 
+			{# {{ form_row(form.image) }} 
 			{% if advert is defined %}
 				{% if advert.image is not null %}
 					<img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" >
 				{% endif %}
-			{% endif %}
+			{% endif %} #}
 		</div> 
 		<div class="well">
 			{{ form_label(form.advertskilles, "Compétences") }}

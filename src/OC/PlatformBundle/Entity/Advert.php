@@ -38,7 +38,6 @@ class Advert
 	private $categories; 
 	/**
 	 * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist", "remove"})
-	 * @Assert\Valid()
 	 */
 	private $image;
     /**

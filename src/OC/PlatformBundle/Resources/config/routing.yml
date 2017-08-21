@@ -24,7 +24,7 @@ oc_platform_category:
 oc_platform_delete_application:
     path: /delete-application/{id}		
     defaults:
-        _controller: OCPlatformBundle:Advert:deleteapplication
+        _controller: OCPlatformBundle:Advert:deleteApplication
     requirements :
         id: \d+
 oc_platform_purge:

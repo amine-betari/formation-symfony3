@@ -28,44 +28,42 @@ class AdvertController extends Controller
 {
 
 
-	 /**
-         * set datatable configs
-         * @return \Waldo\DatatableBundle\Util\Datatable
-         */
-        private function datatableAdmin() 
-        {
-
+	/**
+     * set datatable configs
+     * @return \Waldo\DatatableBundle\Util\Datatable
+     */
+    private function datatableAdmin() 
+	{
 		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
 			throw new AccessDeniedException('Accès limité aux auteurs.');
 		}
 
-                $datatable =  $this->get('datatable')
-                            ->setEntity('OCPlatformBundle:Advert', 'a')
-                            ->setFields(
-                                array(
-	                                "Name"		   			=> "a.title",
-									"Nombre postulé"        => "a.nbApplications",
-									"Compétences demandées" => "a.published",
-									"Actions" 				=> "a.title",
-                                    "_identifier_" => "a.id")
-                                )
-                             ->setRenderers(
-                                    array(
-                                        0 => array(
-											'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
-                                        ),
-                                        2 => array(
-											'view' => 'OCPlatformBundle:Advert:_skills.html.twig'
-										),
-										3 => array(
-											'view' => 'OCPlatformBundle:Advert:_actions_admin.html.twig'
-										),
-                                    )
-                            )
-                            ->setOrder('a.date', 'desc')
-                            ->setGlobalSearch(true);
-                return $datatable;
-        }
+		$datatable =  $this->get('datatable')
+					->setEntity('OCPlatformBundle:Advert', 'a')
+					->setFields(
+						array(
+							"Name"		   			=> "a.title",
+							"Nombre postulé"        => "a.nbApplications",
+							"Compétences demandées" => "a.published",
+							"Actions" 				=> "a.title",
+							"_identifier_" => "a.id")
+						)
+					 ->setRenderers( array(
+								0 => array(
+									'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
+								),
+								2 => array(
+									'view' => 'OCPlatformBundle:Advert:_skills.html.twig'
+								),
+								3 => array(
+									'view' => 'OCPlatformBundle:Advert:_actions_admin.html.twig'
+								),
+							)
+						)
+					->setOrder('a.date', 'desc')
+					->setGlobalSearch(true);
+		return $datatable;
+	}
 
 
 	/**
@@ -130,7 +128,7 @@ class AdvertController extends Controller
 
 	
 	/**
-         *
+     *
  	 */
 	public function dataAdminAction()
 	{
@@ -139,7 +137,7 @@ class AdvertController extends Controller
 	}
 
 	/**
-         * 
+	 * 
 	 * 
 	 */	
 	public function deleteRelationAction(Request $request)
@@ -218,7 +216,6 @@ class AdvertController extends Controller
 	// $em->find() ainsi que le if (null !== $advert)
 	// On peut faire tout simplement $advert->getID();
 	$id = $request->attributes->get('id');
-	// return $this->get('templating')->renderResponse('OCPlatformBundle:Advert:view.html.twig', array('id' => $id, 'tag' => $tag));
 	$url = $this->get('router')->generate('oc_platform_home');
 	// return new RedirectResponse($url);
 	// return $this->redirect($url);
@@ -326,38 +323,7 @@ class AdvertController extends Controller
 			$request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée');
 			return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
 		}
-
 		return $this->render('OCPlatformBundle:Advert:add.html.twig', array('form' => $form->createView()));
-
-		// Manipuler un service
-		/*$antispam = $this->container->get('oc_platform.antispam');
-		$text = "...";
-		if($antispam->isSpam($text)) {
-			throw new \Exception('Votre message a été détecté comme spam !');
-		}*/
-		
-	
-		// On lié  l'image à l'annonce
-		$advert->setImage($image);
-	
-		// Get All Skills
-		$listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
-		//  for each skill
-		foreach($listSkills as $skill) {
-			// On créer une nouvelle relation entre 1 annonce et 1 compétence
-			$advertskill = new AdvertSkill();
-			$advertskill->setAdvert($advert);
-			$advertskill->setSkill($skill);
-			$advertskill->setLevel("Expert");
-			// on persiste cette entité de relation propriétaire des deux  autres relations
-			$em->persist($advertskill);
-		}
-		
-		// Etape 1 : persister l'objet
-		$em->persist($advert);
-		// Si on  n'avait pas défini le cascade={"persist"},
-		// on devrait persister à la main l'entité $image
-		// $em->persist($image);
 	}
 
 	
@@ -367,10 +333,15 @@ class AdvertController extends Controller
 			throw new AccessDeniedException('Accès limité aux auteurs.');
 		}
 		
+		
 		$em = $this->get('Doctrine')->getManager();
 		$advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
 		if($advert === null){
 			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas. ");
+		}
+		// Test if user can dit advert
+		if( $advert->getAuthor() !== $this->getUser() ) {
+			throw new NotFoundHttpException("Tu triches !!");
 		}
 		
 		// On creér le formBuilder grâce au service form factory
@@ -387,9 +358,9 @@ class AdvertController extends Controller
 			foreach($ads as $s)
 			{
 			 // Set Current Advert
-			     $s->setAdvert($advert);
+				$s->setAdvert($advert);
 			 // Re-set the AdvertSkills in Advert object
-       			     $advert->addAdvertskille($s);
+       			$advert->addAdvertskille($s);
 			}
 			// On récupère l'EntityManager
 			$em = $this->get('doctrine')->getManager();	
@@ -417,6 +388,9 @@ class AdvertController extends Controller
 		if($advert === null){
 			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas. ");
 		}
+		if( $advert->getAuthor() !== $this->getUser() ) {
+			throw new NotFoundHttpException("Tu triches !!");
+		}
 		
 		// On créer un formulaire vide, qui ne contiendra que le champ CSRF
 		// Cela permet de protéger la supression d'annonce contre cette faille
@@ -431,23 +405,6 @@ class AdvertController extends Controller
 			'advert' => $advert,
 			'form'   => $form->createView(),
 		));
-		// on boucle sur les catégories de l'annonce pour les supprimer
-		/*foreach($advert->getCategories() as $category) {
-			$advert->removeCategory($category);
-		}*/
-		
-		// delete the applications with  avdert
-		/*$listApplications = $em->getRepository('OCPlatformBundle:Application')->findBy(array('advert' => $advert));
-		foreach($listApplications as $application) {
-			$em->remove($application);
-		}
-		*/
-		
-		// delete the adverrskills with  avdert
-		/*$listAdvertSkill= $em->getRepository('OCPlatformBundle:AdvertSkill')->findBy(array('advert' => $advert));
-		foreach($listAdvertSkill as $advertSkill) {
-			$em->remove($advertSkill);
-		}*/
 	}
 	
 
@@ -496,7 +453,7 @@ class AdvertController extends Controller
 	}
 	
 	
-	public function deleteapplicationAction($id)
+	public function deleteApplicationAction($id)
 	{
 		$em = $this->get('doctrine')->getManager();
 		$application = $em->getRepository('OCPlatformBundle:Application')->find($id);
