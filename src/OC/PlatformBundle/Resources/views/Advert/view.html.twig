@@ -7,13 +7,8 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-
-  {% if advert.image is not null %}
-	<!-- <img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" > -->
-  {% endif %}
   <h2>{{ advert.title }}</h2>
   <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
-
   <div class="well">
 	{% if not advert.categories.empty %}
 		<p>
@@ -23,7 +18,10 @@
 			{% endfor %}
 		</p>
 	{% endif %}
-		<p>	{{ advert.content }} </p>
+		<p><strong> Descriptif du poste </strong> <i>{{ advert.descriptif }} </i></p>
+		<p><strong> Profil recherché </strong><i>	{{ advert.profil }} </i></p>
+		<p><strong> Salaire demandé </strong><i>	{{ advert.salaire }} </i></p>
+		<p><strong> Ce poste est sur la ville  : </strong><i>	{{ advert.ville }} </i></p>
 	{% if listAdvertSkills|length > 0 %}
 	  <div>
 		Cette annonce <b> </b>requiert les compétences suivantes :

@@ -72,22 +72,29 @@ class Advert
      */
     private $title;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="author", type="string", length=255)
-	 * @Assert\Length(min=5)
-     */
+   /**
+	 * @ORM\ManyToOne(targetEntity="OC\UserBundle\Entity\User", cascade={"persist"})
+	 * @Assert\Valid()
+	 */
     private $author;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="string", length=255)
+     * @ORM\Column(name="descriptif", type="string", length=255)
 	 * @Assert\NotBlank()
 	 * @Antiflood()
      */
-    private $content;
+    private $descriptif;
+	
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="profil", type="string", length=255)
+	 * @Assert\NotBlank()
+	 * @Antiflood()
+     */
+    private $profil;
 
 	/**
 	 * @ORM\Column(name="updated_at", type="datetime", nullable=true)
@@ -98,6 +105,19 @@ class Advert
 	 * @ORM\Column(name="nb_applications", type="integer")
 	 */
 	private $nbApplications = 0; 
+	
+	/**
+	 * @var string
+	 * @ORM\Column(name="salaire", type="string", length=25)
+	 */
+	private $salaire;
+	
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="ville", type="string", length=25)
+     */
+    private $ville;
 	
 	/**
 	 * @Gedmo\Slug(fields={"title"})
@@ -196,29 +216,6 @@ class Advert
         return $this->author;
     }
 
-    /**
-     * Set content
-     *
-     * @param string $content
-     *
-     * @return Advert
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
 
     /**
      * Set published
@@ -396,14 +393,14 @@ class Advert
     
     public function increaseApplication()
     {
-	$this->nbApplications++;
+		$this->nbApplications++;
     }
 
 
-     public function decreaseApplication()
-     {
-	$this->nbApplications--;
-     }
+    public function decreaseApplication()
+    {
+		$this->nbApplications--;
+    }
 
     /**
      * Set slug
@@ -478,13 +475,109 @@ class Advert
 		$forbiddenWords = array('démotivation', 'abandon');
 
 		// On vérifie que le contenu ne contient pas l'un des mots
-		if (preg_match('#'.implode('|', $forbiddenWords).'#', $this->getContent())) {
+		if (preg_match('#'.implode('|', $forbiddenWords).'#', $this->getDescriptif())) {
 		  // La règle est violée, on définit l'erreur
 		  $context
 			->buildViolation('Contenu invalide car il contient un mot interdit.') // message
-			->atPath('content')                                                   // attribut de l'objet qui est violé
+			->atPath('descriptif')                                                   // attribut de l'objet qui est violé
 			->addViolation() // ceci déclenche l'erreur, ne l'oubliez pas
 		  ;
 		}
 	}
+
+    /**
+     * Set descriptif
+     *
+     * @param string $descriptif
+     *
+     * @return Advert
+     */
+    public function setDescriptif($descriptif)
+    {
+        $this->descriptif = $descriptif;
+
+        return $this;
+    }
+
+    /**
+     * Get descriptif
+     *
+     * @return string
+     */
+    public function getDescriptif()
+    {
+        return $this->descriptif;
+    }
+
+    /**
+     * Set profil
+     *
+     * @param string $profil
+     *
+     * @return Advert
+     */
+    public function setProfil($profil)
+    {
+        $this->profil = $profil;
+
+        return $this;
+    }
+
+    /**
+     * Get profil
+     *
+     * @return string
+     */
+    public function getProfil()
+    {
+        return $this->profil;
+    }
+
+    /**
+     * Set salaire
+     *
+     * @param string $salaire
+     *
+     * @return Advert
+     */
+    public function setSalaire($salaire)
+    {
+        $this->salaire = $salaire;
+
+        return $this;
+    }
+
+    /**
+     * Get salaire
+     *
+     * @return string
+     */
+    public function getSalaire()
+    {
+        return $this->salaire;
+    }
+
+    /**
+     * Set ville
+     *
+     * @param string $ville
+     *
+     * @return Advert
+     */
+    public function setVille($ville)
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    /**
+     * Get ville
+     *
+     * @return string
+     */
+    public function getVille()
+    {
+        return $this->ville;
+    }
 }

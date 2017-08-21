@@ -16,7 +16,6 @@
 			 <li><a href="{{ path('oc_platform_list_skill') }}">{{ "List Skills"|trans }}</a></li>
 		 {% endif %}
 		 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-  			 <!--Connecté en tant que {{ app.user.username }}-->
 			 <li><a href="{{ path('fos_user_security_logout') }}">{{ "Déconnexion"|trans }}</a></li>
 			 <li><a href="{{ path('fos_user_profile_edit') }}">{{ "Edit Your Profil"|trans }}</a></li>
 		  {% else %}

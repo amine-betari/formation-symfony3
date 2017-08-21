@@ -29,10 +29,17 @@
 	    {# Idem pour un autre champ. #}
 
 	  <div class="form-group">
-		{{ form_label(form.content, "Contenu de l'annonce", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-		{{ form_errors(form.title) }}
+		{{ form_label(form.descriptif, "Descriptif du poste", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+		{{ form_errors(form.descriptif) }}
 		<div class="col-sm-10">
-		  {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
+		  {{ form_widget(form.descriptif, {'attr': {'class': 'form-control'}}) }}
+		</div>
+	  </div>
+	  <div class="form-group">
+		{{ form_label(form.profil, "Profil recherché", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+		{{ form_errors(form.profil) }}
+		<div class="col-sm-10">
+		  {{ form_widget(form.profil, {'attr': {'class': 'form-control'}}) }}
 		</div>
 	  </div>
 		{# Bloc to custom render balise #}
@@ -54,21 +61,23 @@
 		{% if form.pubished is defined %}
 			{{ form_row(form.published) }}
 		{% endif %}
-		<div class="well">
+		<div class="well"> 
 			{{ form_row(form.image) }} 
 			{% if advert is defined %}
 				{% if advert.image is not null %}
 					<img src="{{ asset(advert.image.getWebPath) }}" alt="{{ advert.image.alt }}" >
 				{% endif %}
 			{% endif %}
+		</div> 
+		<div class="well">
+			{{ form_label(form.advertskilles, "Compétences") }}
+			<ul class="tags" data-prototype="{{ form_widget(form.advertskilles.vars.prototype)|e('html_attr') }}"> 
+			</ul> 
 		</div>
 		<div class="well">
-			{{ form_label(form.advertskilles) }}
-			<ul class="tags" data-prototype="{{ form_widget(form.advertskilles.vars.prototype)|e('html_attr') }}"> 
-			<!-- <ul class="tags">  -->
-			</ul> 
-		
-			
+			{{ form_label(form.categories, "Secteur d'activité") }}
+			<ul class="categories" data-prototype="{{ form_widget(form.categories.vars.prototype)|e('html_attr') }}">
+			</ul>
 		</div>
 		{# Génération automatique des champs pas encore écrits.
 			Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
@@ -91,24 +100,35 @@
 	var $collectionHolder;
 
 	// setup an "add a tag" link
-	var $addTagLink = $('<a href="#" class="add_tag_link">Add a Skill</a>');
+	var $addTagLink = $('<a href="#" class="add_tag_link">Ajouter une compétence</a>');
 	var $newLinkLi = $('<li></li>').append($addTagLink);
+	var $addSecLink = $('<a href="#" class="add_categorie_link">Ajouter un secteur d\'activité</a>');
+	var $newLinkLiSecteur = $('<li></li>').append($addSecLink);
+
+	
 
 	jQuery(document).ready(function() {
+		// hide somes lables
+		$('#advert_advertskilles').prev().hide();
+		$('#advert_categories').prev().hide();
 		// Get the ul that holds the collection of tags
 		$collectionHolder = $('ul.tags');
+		$collectionHolderSecteur = $('ul.categories');
 
 		// add the "add a tag" anchor and li to the tags ul
 		$collectionHolder.append($newLinkLi);
+		$collectionHolderSecteur.append($newLinkLiSecteur);
 
 		$collectionHolder.find('li').each(function() {
-			addCategoryFormDeleteLink($(this));
-
+			FormDeleteLinkSkills($(this));
 		});
+		
 
 		// count the current form inputs we have (e.g. 2), use that as the new
 		// index when inserting a new item (e.g. 2)
 		$collectionHolder.data('index', $collectionHolder.find(':input').length);
+		// categories
+		$collectionHolderSecteur.data('index', $collectionHolderSecteur.find(':input').length);
 
 		// Managing  Update 
 		if($('#advert_edit_advertskilles > .form-group').length > 0) {
@@ -128,6 +148,14 @@
 			// add a new tag form (see next code block)
 			addCategoryForm($collectionHolder, $newLinkLi);
 		});
+		
+		// categories 
+		$addSecLink.on('click', function(e) {
+					e.preventDefault();
+                // add a new tag form (see code block below)
+			addSecteurForm($collectionHolderSecteur, $newLinkLiSecteur);
+		});
+				
 		// click delete button element
 		var $link = $('.relation');
 		$link.on('click', function(e) {
@@ -178,10 +206,10 @@
 		// Display the form in the page in an li, before the "Add a tag" link li
 		var $newFormLi = $('<li></li>').append(newForm);
 		$newLinkLi.before($newFormLi);
-		addCategoryFormDeleteLink($newFormLi);
+		FormDeleteLinkSkills($newFormLi);
 	}
-	function addCategoryFormDeleteLink($tagFormLi) {
-		var $removeFormA = $('<a href="#"> Delete this skill</a>');
+	function FormDeleteLinkSkills($tagFormLi) {
+		var $removeFormA = $('<a href="#"> Supprimer </a>');
 		$tagFormLi.append($removeFormA);
 		$removeFormA.on('click', function(e) {
 			// prevent the link from creating a "#" on the URL
@@ -190,5 +218,30 @@
 			$tagFormLi.remove();
 		});
 	}
+	// categories 
+	
+function addSecteurForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+    // get the new index
+    var index = $collectionHolder.data('index');
+    // Replace '$$name$$' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    // also add a remove button, just for this example
+    $newFormLi.append('<a href="#" class="remove-sec">x</a>');
+    $newLinkLi.before($newFormLi);
+    
+    // handle the removal, just for this example
+    $('.remove-sec').click(function(e) {
+        e.preventDefault();
+        $(this).parent().remove();
+        return false;
+    });
+}
 	
 </script>

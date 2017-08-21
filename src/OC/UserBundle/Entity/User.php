@@ -146,4 +146,9 @@ class User extends BaseUser
     {
         return $this->nom;
     }
+	
+	public function __toString()
+	{
+		return $this->nom; // <-- add here a real property which
+	}
 }

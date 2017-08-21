@@ -41,54 +41,43 @@ class AdvertType extends AbstractType
 					]
 				] )
 			  ->add('title',     TextType::class)
-			  ->add('content',   TextareaType::class)
-			  //->add('content',   CkeditorType::class, array('attr' => array('class' => 'ckeditor')))
-			  ->add('author',    TextType::class, array('data' => $options['user']))
-			  //->add('published', CheckboxType::class, array('required' => false))
+			  ->add('descriptif',   TextareaType::class)
+			  ->add('profil',   TextareaType::class)
+			  ->add('author',    EntityType::class, array(
+						'class'         => 'OCUserBundle:User',
+						'data' => $options['user'],
+						'multiple'      => false,
+					))
+			  ->add('salaire',     TextType::class)
+			  ->add('ville',     TextType::class)
 			  ->add('image', ImageType::class, array('required' => false)) // ImageType est un formulaire
-                  	  /*->add('categories', CollectionType::class, array(
-			      'entry_type'   => CategoryType::class,
-				  'allow_add'    => true,
-				  'allow_delete' => true
-			  ))*/
-			  
-			   
-			   // ->add('Skill', EntityType::class, array(
-				// 'class'			=> 'OCPlatformBundle:Skill',
-				// 'choice_label'      => 'name',
-				// 'multiple'      => true,
-				// 'expanded'      => true,
-			   // ))
+                  	  ->add('categories', CollectionType::class, array(
+						  'entry_type'   => CategoryType::class,
+						  'allow_add'    => true,
+						  'allow_delete' => true,
+						  'allow_extra_fields'	 => true
+					    ))
 			   ->add('advertskilles', CollectionType::class, array(
-				'entry_type'			=> AdvertSkillType::class,
-				'allow_add'    => true,
-				'allow_delete' => true,
-				'by_reference' => false,
+					'entry_type'			=> AdvertSkillType::class,
+					'allow_add'    => true,
+					'allow_delete' => true,
+					'by_reference' => false,
 			   ))
-			   ->add('categories', EntityType::class, array(
-				 'class'         => 'OCPlatformBundle:Category',
-				 'choice_label'  => 'name',
-				 'multiple'      => true,
-				 'expanded'	 => true
-				/* 'query_builder' => function(CategoryRepository $repository) use($pattern) {
-				return $repository->getLikeQueryBuilder($pattern);
-				 }*/
-			   ))
+			     // ->add('categories', EntityType::class, array(
+					 // 'class'         => 'OCPlatformBundle:Category',
+					 // 'choice_label'  => 'name',
+					 // 'multiple'      => true,
+					 // 'expanded'	 => true
+							// /* 'query_builder' => function(CategoryRepository $repository) use($pattern) {
+							// return $repository->getLikeQueryBuilder($pattern);
+							 // }*/
+				 // ))
 			  ->add('save',      SubmitType::class);
-            
-			
-			//->add('nbApplications');
-			/*->add('updatedAt', 'datetime')
-            ->add('slug')
-            ->add('categories')
-            ->add('image')*/
-        
-		
-		// On ajoute une fonction qui va écouter un événement 
+	
+		// On ajoute une fonction qui va Ã©couter un Ã©vÃ©nement 
 		$builder->addEventListener(
 			FormEvents::PRE_SET_DATA, // 1er argument : l'evenement qui nous interesse,
-			  // Cet evenement est declenche just avant que les champs ne soient pas remplis avec les valeurs de l'objet
-			function(FormEvent $event) { // 2eme argument, la fonction à exécuter lorsque l'evenment est délenché
+			function(FormEvent $event) { 
 				// On recupere notre objet Advert sous-jacent
 				$advert = $event->getData();
 				if($advert === null) {
@@ -96,7 +85,9 @@ class AdvertType extends AbstractType
 				}
 				
 				if(!$advert->getPublished() || null === $advert->getId()) {
-					$event->getForm()->add('published', CheckboxType::class, array('required' => false));
+					$event->getForm()->add('published', CheckboxType::class, array(
+							'required' => false,
+							'label' => ' Publier automatiquement l\'annonce Ã  sa crÃ©ation'));
 				} else {
 					// Sinon on le supprime, 
 					$event->getForm()->remove('published');

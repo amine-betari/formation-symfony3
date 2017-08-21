@@ -1,5 +1,4 @@
 <?php
-
 namespace OC\PlatformBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -19,16 +18,18 @@ class AdvertSkillType extends AbstractType
     {
         $builder
             ->add('level', ChoiceType::class, array(
-		'choices' => array(
-			'Expert'   => 'expert',
-			'Debutant' => 'debutant',
-			'Senior'   => 'senior'
-		)
-	    ))
-//            ->add('advert')
-//            ->add('skill')
+				'label' => 'Expérience',
+				'choices' => array(
+					'Debutant' => 'debutant',
+					'Confirmé' => 'confirme',
+					'Senior'   => 'senior',
+					'Expert'   => 'expert',
+					'Autre'   => 'autre',
+				)
+			))
             ->add('skill', EntityType::class, array(
                                  'class'         => 'OCPlatformBundle:Skill',
+								 'label' => 'Compétence',
                                  'choice_label'  => 'name',
                                  'multiple'      => false,  
                            ))

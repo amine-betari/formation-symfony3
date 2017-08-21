@@ -43,23 +43,23 @@ class AdvertController extends Controller
                             ->setEntity('OCPlatformBundle:Advert', 'a')
                             ->setFields(
                                 array(
-	                                "Name"		   	=> "a.title",
-					"Nombre postulé"        => "a.nbApplications",
-			                "Compétences demandées" => "a.published",
-					"Actions" 		=> "a.title",
-                                        "_identifier_" => "a.id")
+	                                "Name"		   			=> "a.title",
+									"Nombre postulé"        => "a.nbApplications",
+									"Compétences demandées" => "a.published",
+									"Actions" 				=> "a.title",
+                                    "_identifier_" => "a.id")
                                 )
                              ->setRenderers(
                                     array(
                                         0 => array(
-					        'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
+											'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
                                         ),
                                         2 => array(
-						'view' => 'OCPlatformBundle:Advert:_skills.html.twig'
-					),
-					3 => array(
-						'view' => 'OCPlatformBundle:Advert:_actions_admin.html.twig'
-					),
+											'view' => 'OCPlatformBundle:Advert:_skills.html.twig'
+										),
+										3 => array(
+											'view' => 'OCPlatformBundle:Advert:_actions_admin.html.twig'
+										),
                                     )
                             )
                             ->setOrder('a.date', 'desc')
@@ -79,12 +79,10 @@ class AdvertController extends Controller
 			    ->setFields(
 				array(
 					"Name"   => "a.title",
-					"Description" => "a.content",
+					"Description" => "a.descriptif",
 					"Compétences demandées" => "a.title",
 					"_identifier_" => "a.id")
 				)
-				 //->addJoin('a.advertskilles', 'ads', \Doctrine\ORM\Query\Expr\Join::INNER_JOIN)
-				 //->addJoin('a.skill', 'skill', \Doctrine\ORM\Query\Expr\Join::INNER_JOIN)	
 			     ->setRenderers(
 	                            array(
         	                        0 => array(
@@ -283,24 +281,18 @@ class AdvertController extends Controller
 
     public function addAction(Request $request) 
     {
-	
 		if (!$this->get('security.authorization_checker')->isGranted('ROLE_AUTEUR')) {
 			throw new AccessDeniedException('Accès limité aux auteurs.');
 		}
-		// On creér l'objet 
 		$advert = new Advert;
-		
 		// On creér le formBuilder grâce au service form factory
 		//$formBuilder = $this->get('form.factory')->createBuilder(FormType::class, $advert);
 		$form = $this->get('form.factory')->create(AdvertType::class, $advert, array('user' => $this->getUser()));
-		
-		//exit(\Doctrine\Common\Util\Debug::dump($advert->getId()));
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 			// exit(\Doctrine\Common\Util\Debug::dump($form->getData()));
 			// On récupère l'EntityManager
 			$em = $this->get('doctrine')->getManager();
-			// $user = $em->getRepository('OCUserBundle:User')->findBy(array('username' => 'soukaina'));
-			$event = new MessagePostEvent($advert->getContent(), $this->getUser());
+			$event = new MessagePostEvent($advert->getDescriptif(), $this->getUser());
 			// on déclenche l'événement
 			$this->get('event_dispatcher')->dispatch(PlatformEvents::POST_MESSAGE, $event);
 			
@@ -318,7 +310,7 @@ class AdvertController extends Controller
 			// GE
 			// On récupère ce qui a été modifié par le ou les listeners, ici le message
 			// GE
-			$advert->setContent($event->getMessage());
+			$advert->setDescriptif($event->getMessage());
 			// Get Data of AdvertSKill from Form
 			$ads = $advert->getAdvertskilles();
 			foreach($ads as $s)
@@ -470,6 +462,24 @@ class AdvertController extends Controller
 		$listAdverts = $repository->findBy(array('published' => true), array('date' => 'desc'), $limit, 0);
 		return $this->render('OCPlatformBundle:Advert:menu.html.twig', array('listAdverts' => $listAdverts));
     }
+	
+	public function menuRecruteurAction($limit)
+	{
+		// Get service Doctrine
+		$doctrine = $this->get('doctrine');
+		// Get EM
+		$em = $doctrine->getManager();
+		// Get repositories 
+		$repository = $em->getRepository('OCPlatformBundle:Advert');
+		
+		$listAdvertsByRecruteur = $repository->findBy(
+			array('published' => true), 
+			array('date' => 'desc'),
+			array('user' => $this->getUser()), 
+			$limit, 0);
+		return $this->render('OCPlatformBundle:Advert:menuRecruteur.html.twig', array('listAdverts' => $listAdvertsByRecruteur));
+    }
+	
 
 	
 	public function listAdvertByCategoryAction($id)
@@ -496,7 +506,10 @@ class AdvertController extends Controller
 		// delete the Advert
 		$em->remove($application);
 		$em->flush();
-		$url = $this->get('router')->generate('oc_platform_view', array('id' => $application->getAdvert()->getId()), UrlGeneratorInterface::ABSOLUTE_URL); 
+		$url = $this->get('router')->generate('oc_platform_view', array(
+			'id' => $application->getAdvert()->getId()),
+			 UrlGeneratorInterface::ABSOLUTE_URL
+			); 
 		return $this->redirect($url);
 	}
 	
