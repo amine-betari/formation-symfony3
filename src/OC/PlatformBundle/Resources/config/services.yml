@@ -10,8 +10,6 @@ services:
         class: OC\PlatformBundle\Email\ApplicationMailer
         arguments:
             - "@mailer"
-            - "%email%"
-#            - "@templating"
             -  "@service_container"
     oc_platform.purger.advert:
         class: OC\PlatformBundle\Purge\AdvertArchive

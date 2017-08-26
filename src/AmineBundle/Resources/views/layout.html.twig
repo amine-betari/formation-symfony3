@@ -22,7 +22,7 @@
 
 <body>
   <div class="container">
-	 {{ render(controller("AmineBundle:Default:header", {'limit': 3})) }}
+	 {{ render_esi(controller("AmineBundle:Default:header", {'limit': 3})) }}
    <div class="row">
       <div id="menu" class="col-md-3">
 		{% block right %}

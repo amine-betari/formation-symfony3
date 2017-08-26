@@ -212,67 +212,80 @@ class AdvertController extends Controller
 	public function viewAction(Request $request, Advert $advert) 
 	{
 	
-	// Grâce à cette signature Advert $advert, nous venons d'économiser :
-	// $em->find() ainsi que le if (null !== $advert)
-	// On peut faire tout simplement $advert->getID();
-	$id = $request->attributes->get('id');
-	$url = $this->get('router')->generate('oc_platform_home');
-	// return new RedirectResponse($url);
-	// return $this->redirect($url);
-	// return $this->redirectToRoute('oc_platform_home');
+		// Grâce à cette signature Advert $advert, nous venons d'économiser :
+		// $em->find() ainsi que le if (null !== $advert)
+		// On peut faire tout simplement $advert->getID();
+		$id = $request->attributes->get('id');
+		$url = $this->get('router')->generate('oc_platform_home');
+		// return new RedirectResponse($url);
+		// return $this->redirect($url);
+		// return $this->redirectToRoute('oc_platform_home');
 
-	// Retourner JSON par exemple
-	// $response = new Response(json_encode(array('id' => $id)));
-	// $response->headers->set('Content-Type', 'application/json');
-	// return $response;
-	// return new JsonResponse(array('id' => $id));
+		// Retourner JSON par exemple
+	//	 $doctrine = $this->get('doctrine');
+	//         $em = $doctrine->getManager();
+	//         $repository = $em->getRepository('OCPlatformBundle:Advert');      
+	//	 $advert = $repository->find($id);
+	//	 $response = new Response(json_encode(array('advert' => $advert)));
+	//	 $response->headers->set('Content-Type', 'application/json');
+	//	 return $response;
+		// return new JsonResponse(array('id' => $id));
 
-	// Gerer les sessions
-	// Récupération de la session
-	//$session = $request->getSession();
-	//$userId = $session->get('user_id');
-	//$session->set('user_id', 91);
+		// Gerer les sessions
+		// Récupération de la session
+		//$session = $request->getSession();
+		//$userId = $session->get('user_id');
+		//$session->set('user_id', 91);
 
-	// Get service Doctrine // $this->getDoctrine();
-	$doctrine = $this->get('doctrine');
-	// Get EM
-	$em = $doctrine->getManager();
-	// Get repositories 
-	$repository = $em->getRepository('OCPlatformBundle:Advert');	  
-	// On récupère l'entité correspondante à l'id $id
-	$advert = $repository->find($id);
-	if($advert === null) {
-		throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
-	}
-	// Get list application of advert
-	$listApplications = $em->getRepository('OCPlatformBundle:Application')->findBy(array('advert' => $advert));
-	// Get list AdvertSkill of Advert
-	$listAdvertSkills = $em->getRepository('OCPlatformBundle:AdvertSkill')->findBy(array('advert' => $advert));
+		// Get service Doctrine // $this->getDoctrine();
+		$doctrine = $this->get('doctrine');
+		// Get EM
+		$em = $doctrine->getManager();
+		// Get repositories 
+		$repository = $em->getRepository('OCPlatformBundle:Advert');	  
+		// On récupère l'entité correspondante à l'id $id
+		$advert = $repository->find($id);
+		if($advert === null) {
+			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+		}
+		// Get list application of advert
+		$listApplications = $em->getRepository('OCPlatformBundle:Application')->findBy(array('advert' => $advert));
+		// Get list AdvertSkill of Advert
+		$listAdvertSkills = $em->getRepository('OCPlatformBundle:AdvertSkill')->findBy(array('advert' => $advert));
 
-	// Create a new Entity of Application
-	$application = new Application();
-	// Get Form Application 
-	$form = $this->get('form.factory')->create(ApplicationType::class, $application, array('user' => $this->getUser()));
-	// Is anonumous
-	if($this->getUser()) $anonymous = 1;
-	else $anonymous = 0;
-	if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-		// Gestion de brochures est au niveau des listener
-		$application->setAdvert($advert);
-		$application->setAuthor($this->getUser());
-		$em->persist($application);
-		$em->flush();
-		// Display message flash for internaute
-		$request->getSession()->getFlashBag()->add('noticeA', 'Votre candidature a été enregistré');
-	}
+		// Create a new Entity of Application
+		$application = new Application();
+		// Get Form Application 
+		$form = $this->get('form.factory')->create(ApplicationType::class, $application, array('user' => $this->getUser()));
+		// Is anonumous
+		if($this->getUser() && $this->getUser()->getMode() == 'candidat') $anonymous = 1;
+		else $anonymous = 0;
+		if($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+			// Gestion de brochures est au niveau des listener
+			$application->setAdvert($advert);
+			$application->setAuthor($this->getUser());
+			$em->persist($application);
+			$em->flush();
+			// Display message flash for internaute
+			$request->getSession()->getFlashBag()->add('noticeA', 'Votre candidature a été enregistré');
+		}
 	
-	return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-			'form' =>  $form->createView(),
-			'advert' => $advert, 
-			'listApplications' => $listApplications,
-			'listAdvertSkills' => $listAdvertSkills,
-			'anonymous' => $anonymous
-		));
+	
+		$response =  $this->render('OCPlatformBundle:Advert:view.html.twig', array(
+				'form' =>  $form->createView(),
+				'advert' => $advert, 
+				'listApplications' => $listApplications,
+				'listAdvertSkills' => $listAdvertSkills,
+				'anonymous' => $anonymous
+			));
+		// Model cache validation
+		
+		$response->setEtag(md5($advert->getDescriptif()));
+		$response->setSharedMaxAge(240);
+		$response->setLastModified($advert->getUpdatedAt());
+		$response->setPublic();
+        $response->isNotModified($request);
+		return $response;
     }
 
 

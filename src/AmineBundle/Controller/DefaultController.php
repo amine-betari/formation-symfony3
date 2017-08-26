@@ -14,31 +14,38 @@ use AmineBundle\Form\ContactType;
 
 class DefaultController extends Controller
 {
-	private $doctrine;
-	private $em;
-     /**
-      * Get the 3 latest adverts
-      * @param
-      * @return 
-      */	 
-    public function indexAction()
+     private $doctrine;
+     private $em;
+
+
+    /**
+     * Get 
+     * @param
+     * @return 
+     */	 
+    public function indexAction(Request $request)
     {
-	// Get service Doctrine
-	$this->doctrine = $this->get('doctrine');
-	// Get EM
-	$this->em = $this->doctrine->getManager();
-	// Get repositories 
-	$repository = $this->em->getRepository('OCPlatformBundle:Category');
-	$listCategories = $repository->findAll();
-        return $this->render('AmineBundle:Default:index.html.twig', array('listCategories' => $listCategories));
+		// Get service Doctrine
+		$this->doctrine = $this->get('doctrine');
+		// Get EM
+		$this->em = $this->doctrine->getManager();
+		// Get repositories 
+		$repository = $this->em->getRepository('OCPlatformBundle:Category');
+		$listCategories = $repository->findAll();
+		$response = $this->render('AmineBundle:Default:index.html.twig', array('listCategories' => $listCategories));
+		// model cache expiration
+		$response->setSharedMaxAge(180);
+		$response->setPublic();
+		return $response;
     }
 	
 	
-	/**
-	 * Display message (page of contact )
-	 * 
-	 */
-	public function contactAction(Request $request) {
+    /**
+     * Display message (page of contact )
+     * 
+     */
+    public function contactAction(Request $request) 
+    {
 		$contact = new Contact;
 		$form = $this->get('form.factory')->create(ContactType::class, $contact);
 		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
@@ -47,13 +54,16 @@ class DefaultController extends Controller
 			$session->getFlashBag()->add('contact', 'votre demande a été pris en compte');	
 			return $this->redirect($this->generateUrl('amine_contact'));
 		}
+		
+		$response = $this->render('AmineBundle:Default:contact.html.twig', array('form' => $form->createView()));
+		$response->setPublic();
+		$response->setSharedMaxAge(86400);
+		return $response;
+    }	
 
-		return $this->render('AmineBundle:Default:contact.html.twig', array('form' => $form->createView()));
-
-	}	
 	
-	public function headerAction($limit)
-	{
+     public function headerAction($limit, Request $request)
+     {
 		// Get service Doctrine
 		$this->doctrine = $this->get('doctrine');
 		// Get EM
@@ -61,10 +71,19 @@ class DefaultController extends Controller
 		// Get repositories 
 		$repository = $this->em->getRepository('AmineBundle:Page');
 		$listPages = $repository->findBy(array('isMenu' => true),array(), $limit, 0);
-		return $this->render('AmineBundle:Default:header.html.twig', array('listPages' => $listPages));
-    }
+		$response = $this->render('AmineBundle:Default:header.html.twig', array('listPages' => $listPages));
+		// cache for 60 seconds
+		$response->setSharedMaxAge(60);
+				// (optional) set a custom Cache-Control directive
+				// $response->headers->addCacheControlDirective('must-revalidate', true);
+		$response->setEtag(md5(time()));
+		//if( $response->isNotModified($request) ) 
+		return  $response;
+	
+      }
 	
 	
+
 	public function pageAction($slug, Request $request)
 	{
 		if ($slug == "nous-contacter") {
@@ -74,6 +93,15 @@ class DefaultController extends Controller
 		$this->em = $this->doctrine->getManager();
 		$repository = $this->em->getRepository('AmineBundle:Page');
 		$page = $repository->findOneBy(array('slug' => $slug),array());
-        return $this->render('AmineBundle:Default:page.html.twig', array('page' => $page));
+
+		$response = $this->render('AmineBundle:Default:page.html.twig', array('page' => $page));
+		// cache for 3600 seconds
+	    $response->setSharedMaxAge(3600);
+
+      	// (optional) set a custom Cache-Control directive
+	    $response->headers->addCacheControlDirective('must-revalidate', true);
+	        //  set one vary header
+		// $response->setVary('Accept-Encoding');
+       	return  $response;
 	}
 }
