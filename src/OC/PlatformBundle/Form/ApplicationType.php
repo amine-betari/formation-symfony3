@@ -9,10 +9,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 
 class ApplicationType extends AbstractType
 {
+	private $security;
+	
+	public function __construct($security)
+	{
+		$this->security = $security;
+	}
+	
+	
     /**
      * {@inheritdoc}
      */
@@ -20,9 +30,19 @@ class ApplicationType extends AbstractType
     {
 		if( $options['user'] ) {
 			$builder
-			->add('content', TextareaType::class)
-			->add('brochure', FileType::class, array('label' => 'Brochure (PDF file)'))
+			->add('content', TextareaType::class, array('label' => 'Exprimez-vous'))
+			->add('brochure', FileType::class, array('label' => 'CV (PDF file)', 'required' => false))
 			->add('save', SubmitType::class);
+			
+			
+			 $builder->addEventListener(
+				FormEvents::POST_SUBMIT, function (FormEvent $event) {
+					$application = $event->getData();
+					$form = $event->getForm();
+					if ( $this->security->getToken()->getUser()->getCv() != null && $application->getBrochure() == null ) {
+						$event->stopPropagation();
+					}
+				}, 900);
 		} 
     }
     
@@ -33,7 +53,7 @@ class ApplicationType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'OC\PlatformBundle\Entity\Application',
-	    'user' => null,
+			'user' => null,
         ));
     }
 

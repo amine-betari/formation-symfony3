@@ -8,6 +8,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
+
 // Plus besoin d'implémenter l'interface UserInterface
 
 /**
@@ -44,6 +45,11 @@ class User extends BaseUser
 	 * @ORM\Column(name="mode", type="string", length=255)
 	 */
 	protected $mode;
+	
+	/**
+	 * @ORM\Column(name="cv", type="string", nullable=true)
+	 */
+	protected $cv;
 	
     public function __construct()
     {
@@ -151,4 +157,28 @@ class User extends BaseUser
 	{
 		return $this->nom; // <-- add here a real property which
 	}
+
+    /**
+     * Set cv
+     *
+     * @param string $cv
+     *
+     * @return User
+     */
+    public function setCv($cv)
+    {
+        $this->cv = $cv;
+
+        return $this;
+    }
+
+    /**
+     * Get cv
+     *
+     * @return string
+     */
+    public function getCv()
+    {
+        return $this->cv;
+    }
 }

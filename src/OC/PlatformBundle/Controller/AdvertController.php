@@ -48,6 +48,10 @@ class AdvertController extends Controller
 							"Actions" 				=> "a.title",
 							"_identifier_" => "a.id")
 						)
+					->setWhere(
+						'a.author = :author',
+						array('author' => $this->getUser()) 
+						)						
 					 ->setRenderers( array(
 								0 => array(
 									'view' => 'OCPlatformBundle:Advert:_actions.html.twig'
@@ -132,7 +136,7 @@ class AdvertController extends Controller
  	 */
 	public function dataAdminAction()
 	{
-		$this->datatable();
+		$this->datatableAdmin();
 		return $this->render('OCPlatformBundle:Advert:data_admin.html.twig');
 	}
 
@@ -180,6 +184,10 @@ class AdvertController extends Controller
 	
 	public function indexAction($page)
 	{
+		// if recruteur redirect  to advertlist
+		if ($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')) {
+			return $this->redirectToRoute('oc_platform_admin_datatable');
+		}
 	
 		$url = $this->get('router')->generate(
 			'oc_platform_view', // name of route
@@ -264,6 +272,7 @@ class AdvertController extends Controller
 			// Gestion de brochures est au niveau des listener
 			$application->setAdvert($advert);
 			$application->setAuthor($this->getUser());
+			// $advert->setNbApplications($advert->getNbApplications()+1);
 			$em->persist($application);
 			$em->flush();
 			// Display message flash for internaute
@@ -280,11 +289,11 @@ class AdvertController extends Controller
 			));
 		// Model cache validation
 		
-		$response->setEtag(md5($advert->getDescriptif()));
-		$response->setSharedMaxAge(240);
-		$response->setLastModified($advert->getUpdatedAt());
-		$response->setPublic();
-        $response->isNotModified($request);
+		//$response->setEtag(md5($advert->getDescriptif()));
+		$response->setSharedMaxAge(2);
+		//$response->setLastModified($advert->getUpdatedAt());
+		//$response->setPublic();
+        //$response->isNotModified($request);
 		return $response;
     }
 
@@ -441,11 +450,10 @@ class AdvertController extends Controller
 		$em = $doctrine->getManager();
 		// Get repositories 
 		$repository = $em->getRepository('OCPlatformBundle:Advert');
-		
 		$listAdvertsByRecruteur = $repository->findBy(
-			array('published' => true), 
+			array('published' => true, 'author'  => $this->getUser() ), 
 			array('date' => 'desc'),
-			array('user' => $this->getUser()), 
+			//array('author' => $this->getUser()), 
 			$limit, 0);
 		return $this->render('OCPlatformBundle:Advert:menuRecruteur.html.twig', array('listAdverts' => $listAdvertsByRecruteur));
     }
@@ -473,7 +481,8 @@ class AdvertController extends Controller
 		if($application === null){
 			throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas. ");
 		}
-		// delete the Advert
+		// delete the application
+		// $application->getAdvert()->setNbApplications($application->getAdvert()->getNbApplications()-1);
 		$em->remove($application);
 		$em->flush();
 		$url = $this->get('router')->generate('oc_platform_view', array(

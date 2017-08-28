@@ -99,9 +99,9 @@ class AdvertType extends AbstractType
 			FormEvents::SUBMIT,
 			function(FormEvent $event) {
 				 $advert = $event->getData();
-                                if($advert === null) {
-                                        return;
-                                }
+				if($advert === null) {
+						return;
+				}
 				$options = $event->getForm()->getConfig()->getOptions();
 				$user =  $options['user'];
 				$advert->setAuthor($user); 

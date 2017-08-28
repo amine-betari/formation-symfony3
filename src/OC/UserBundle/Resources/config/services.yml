@@ -3,3 +3,13 @@ services:
         class: OC\UserBundle\Form\RegistrationType
         tags:
             - { name: form.type, alias: oc_user_registration } 
+    oc_user.form.profile:
+        class: OC\UserBundle\Form\ProfileType
+        arguments:
+            -  "@service_container"
+        tags:
+            - { name: form.type, alias: os_user_profile } 
+    oc_user_redirect.after.login:
+        class: OC\UserBundle\Redirection\UserRedirection
+        arguments:
+            - "@router"

@@ -19,13 +19,13 @@ class AdvertEditType extends AdvertType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-	$idCurrentAdvert = $builder->getData()->getId();
-	$builder->remove("date");
-	// add  a hidden input without have a filed in entity
-	$builder->add('advertId', HiddenType::class, 
-			array('mapped' => false ,
-			      'data' => $idCurrentAdvert,
-			));
+		$idCurrentAdvert = $builder->getData()->getId();
+		$builder->remove("date");
+		// add  a hidden input without have a filed in entity
+		$builder->add('advertId', HiddenType::class, 
+				array('mapped' => false ,
+					  'data' => $idCurrentAdvert,
+				));
     }
     
     

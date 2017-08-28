@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use OC\PlatformBundle\Entity\Application;
-use OC\PlatformBundle\File\FileUploader;
+use AmineBundle\File\FileUploader;
 use OC\PlatformBundle\Email\ApplicationMailer;
 
 class BrochureUploadListener
@@ -54,12 +54,12 @@ class BrochureUploadListener
 			return;
 		}
 		 $file = $entity->getBrochure();
-	        // only upload new filess
-                if (!$file instanceof UploadedFile) {
-        		return;
-                }
+	// only upload new filess
+		if (!$file instanceof UploadedFile) {
+		return;
+		}
 
-                $fileName = $this->uploader->upload($file);
-                $entity->setBrochure($fileName);
+		$fileName = $this->uploader->upload($file);
+		$entity->setBrochure($fileName);
 	}
 }

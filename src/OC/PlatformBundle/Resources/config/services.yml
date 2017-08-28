@@ -55,16 +55,23 @@ services:
         class: OC\PlatformBundle\ParamConverter\JsonParamConverter
         tags:
             - { name: request.param_converter }
-    oc_platform.brochure_uploader:
-        class: OC\PlatformBundle\File\FileUploader
-        arguments: ['%brochures_directory%']
+    # oc_platform.brochure_uploader:
+        # class: OC\PlatformBundle\File\FileUploader
+        # arguments: ['%brochures_directory%']
     oc_platform.doctrine_application_creation:
         class: OC\PlatformBundle\EventListener\ApplicationCreationListener
         arguments: 
             - "@oc_platform.brochure_uploader"
             - "@oc_platform.email.application_mailer"
+            - "@security.token_storage"
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: postRemove }
             - { name: doctrine.event_listener, event: postPersist }
+    oc_platform.application:
+        class: OC\PlatformBundle\Form\ApplicationType
+        arguments:
+            - "@security.token_storage"
+        tags:
+            - {name: form.type }		

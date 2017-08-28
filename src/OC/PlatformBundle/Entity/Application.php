@@ -5,7 +5,6 @@ namespace OC\PlatformBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-//use OC\UserBundle\Entity\User;;
 
 /**
  * Application
@@ -175,7 +174,8 @@ class Application
 	/**
 	 * @ORM\PrePersist
 	 */
-	public function increase() {
+	public function increase() 
+	{
 		$this->getAdvert()->increaseApplication();
 	}
 
@@ -183,7 +183,8 @@ class Application
 	/**
 	 * @ORM\PreRemove
 	 */
-	public function decrease(){
+	public function decrease()
+	{
 		$this->getAdvert()->decreaseApplication();
 	}	
 

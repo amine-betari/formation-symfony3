@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use OC\PlatformBundle\Entity\Application;
-use OC\PlatformBundle\File\FileUploader;
+use AmineBundle\File\FileUploader;
 use OC\PlatformBundle\Email\ApplicationMailer;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 
@@ -16,11 +16,14 @@ class ApplicationCreationListener
 
 	private $mailer;
 	
+	private $tokenStorage;
 	
-	public function __construct(FileUploader $uploader,  ApplicationMailer $mailer) 
+	
+	public function __construct(FileUploader $uploader,  ApplicationMailer $mailer, $tokenStorage) 
 	{
 		$this->uploader = $uploader;
 		$this->mailer = $mailer;
+		$this->tokenStorage = $tokenStorage;
 		
 	}
 
@@ -54,9 +57,11 @@ class ApplicationCreationListener
 			return;
 		}
 		$file = $entity->getBrochure();
-		// delete file from faillure
-		$pathFile = $this->uploader->getTargetDir().'/'.$file;
-		if(file_exists($pathFile)) unlink($pathFile);
+		if( $entity->getAuthor()->getCv() !== $entity->getBrochure() ) {
+			// delete file from faillure
+			$pathFile = $this->uploader->getTargetDir().'/'.$file;
+			if(file_exists($pathFile)) unlink($pathFile);
+		} 
 	}
 	
 
@@ -65,10 +70,16 @@ class ApplicationCreationListener
 		if (!$entity instanceof Application) {
 			return;
 		}
-		 $file = $entity->getBrochure();
-	        // only upload new filess
-        if (!$file instanceof UploadedFile) return;
-        $fileName = $this->uploader->upload($file);
+		
+		// cas : internaute a son CV et n'a rien uploader
+		if( $this->tokenStorage->getToken()->getUser()->getCv() != null && $entity->getBrochure() == null) {
+			$fileName = $this->tokenStorage->getToken()->getUser()->getCv();
+		} else {
+			$file = $entity->getBrochure();
+				// only upload new filess
+			if (!$file instanceof UploadedFile) return;
+			$fileName = $this->uploader->upload($file);
+		}
         $entity->setBrochure($fileName);
 	}
 }

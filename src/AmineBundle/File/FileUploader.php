@@ -1,6 +1,6 @@
 <?php
 
-namespace OC\PlatformBundle\File;
+namespace AmineBundle\File;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

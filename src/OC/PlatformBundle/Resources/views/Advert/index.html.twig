@@ -36,5 +36,9 @@
 			</li>
 		{% endfor %}
 	</ul>
-	<p><strong>Vous pouvez aussi lister les offres à travers <a href="{{ path('oc_platform_datatable') }}">ce lien</a></strong></p>
+	{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_RECRUTEUR") %}
+		<p><strong>Vous pouvez aussi lister les offres à travers <a href="{{ path('oc_platform_admin_datatable') }}">ce lien</a></strong></p>
+	{% else %}
+		<p><strong>Vous pouvez aussi lister les offres à travers <a href="{{ path('oc_platform_datatable') }}">ce lien</a></strong></p>
+	{% endif %}
 {% endblock %}
