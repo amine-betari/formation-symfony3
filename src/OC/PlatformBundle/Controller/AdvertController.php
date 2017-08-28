@@ -188,13 +188,6 @@ class AdvertController extends Controller
 		if ($this->get('security.authorization_checker')->isGranted('ROLE_RECRUTEUR')) {
 			return $this->redirectToRoute('oc_platform_admin_datatable');
 		}
-	
-		$url = $this->get('router')->generate(
-			'oc_platform_view', // name of route
-			 array('id' => 5), //  les valeurs des paramètres
-			UrlGeneratorInterface::ABSOLUTE_URL
-		); // $url vaut "/platform/advert/5"
-		
 		// Pagination : Fixer le nombre d'annonce par page à 3
 		$nbPerPage = 3;
 		// Get service Doctrine
@@ -204,11 +197,13 @@ class AdvertController extends Controller
 		// Get repositories 
 		$repository = $em->getRepository('OCPlatformBundle:Advert');
 		$listAdverts = $repository->getAdverts($page, $nbPerPage);
+//		if ($listAdverts === null) 
+//		var_dump(count($listAdverts)); 
+		if(count($listAdverts) == 0) $listAdverts = null;
 		// Pagination : On calcule le nbr totale de pages
 		$nbPages = ceil(count($listAdverts) / $nbPerPage);
 		// Pagination :si la page n'existe pas, on retourne un 404
-		if ($page > $nbPages) throw new NotFoundHttpException("La page ".$page." n'existe pas.");
-
+		// if ($page > $nbPages) throw new NotFoundHttpException("La page ".$page." n'existe pas.");
 		return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
 			'listAdverts' => $listAdverts,
 			'nbPages' => $nbPages,
@@ -218,8 +213,7 @@ class AdvertController extends Controller
 
 
 	public function viewAction(Request $request, Advert $advert) 
-	{
-	
+	{	
 		// Grâce à cette signature Advert $advert, nous venons d'économiser :
 		// $em->find() ainsi que le if (null !== $advert)
 		// On peut faire tout simplement $advert->getID();

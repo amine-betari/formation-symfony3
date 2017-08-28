@@ -15,15 +15,61 @@
 			{{ flashMessage }}
 		{% endfor %}
 	<div style="text-align: center;">
-		<h2>Que cherchez vous ?</h2>
+		<h2>BAS ne propose que les meilleurs</h2>
 	</div>
-	 <ul class="list-group">
+	<div class="col-md-12">
+		<div class="col-xs-12 col-md-6">
+			 <div>
+                            <h2>Comment ça marche ?</h2>
+                            <ul style="padding-top: 10px">
+                                <li>
+                                    Déposez votre candidature
+                                </li>
+                                <li>
+                                    Choisissez parmi nos <strong>offres d'emploi</strong> les mieux <strong>adaptées à votre profil</strong> grâce à notre système de <strong>matching intelligent</strong>
+                                </li>
+                                <li>
+                                    Visualisez les dernières offres d'emploi publiées
+                                </li>
+                                <li>
+                                    Vous êtes une entreprise ? Un espace recruteur est fait pour vous!
+                                </li>
+                                <li>
+                                   bas conseil est pour vous
+                                </li>
+	                     </ul>
+                        </div>
+		</div>
+		<div class="col-xs-12 col-md-6">
+                         <div>
+                            <h2>Votre Equipe au complet en un temps record</h2>
+                            <ul style="padding-top: 10px">
+                                <li>
+                                    Ne perdez plus le temps
+                                </li>
+                                <li>
+                                    Les candidats avec qui vous entrez en contact comptent parmi les meilleurs dans leurs domaines
+                                </li>
+                                <li>
+                                    Ils sont disponibles immédiatement
+                                </li>
+                                <li>
+                                    Ils sont là que pour vous 
+                                </li>
+                                <li>
+                                   bas conseil est pour vous
+                                </li>
+                             </ul>
+                        </div>
+                </div>
+	</div>
+	<!-- <ul class="list-group">
 		{% for category in listCategories %}
 		  <li class="list-group-item list-group-item-info"><a href="{{ path('oc_platform_category', {'id': category.id}) }}"> {{ category.name }}</a> </li>
 		{% else %}
 		  <li>Pas (encore !) d'annonces</li>
 		{% endfor %}
-	</ul>
+	</ul> -->
 	{% endblock %}
 {% endblock %}
 

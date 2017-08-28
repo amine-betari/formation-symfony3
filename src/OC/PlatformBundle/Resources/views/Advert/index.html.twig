@@ -7,7 +7,8 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-	<h2>Missions</h2>
+ {% if listAdverts is not  null %}
+	<h2>Job disponibles</h2>
 	<ul class="nav nav-pills nav-stacked">
     {% for advert in listAdverts %}
 	      <li style="height: 100px; width: 72%; float:left;">
@@ -41,4 +42,7 @@
 	{% else %}
 		<p><strong>Vous pouvez aussi lister les offres à travers <a href="{{ path('oc_platform_datatable') }}">ce lien</a></strong></p>
 	{% endif %}
+{% else %}
+	<p>Aucune annonce pour le moment</p>
+{% endif %}
 {% endblock %}

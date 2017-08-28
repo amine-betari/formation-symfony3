@@ -19,17 +19,17 @@ class LoadAdvert implements FixtureInterface
 	);
 
     foreach ($names as $name) {
-          // On crée la l'annonce
-	  $advert = new Advert();
-	  $advert->setTitle($name[0]);
-	  $advert->setContent($name[1]);
-	  $advert->setAuthor($name[2]);
-	  $advert->setUpdatedAt($name[3]);
-      	  // On la persiste
-      	  $manager->persist($advert);
+         // On crée la l'annonce
+	 // $advert = new Advert();
+	 // $advert->setTitle($name[0]);
+	 // $advert->setContent($name[1]);
+	 // $advert->setAuthor($name[2]);
+	 //  $advert->setUpdatedAt($name[3]);
+      	 // On la persiste
+      	 //  $manager->persist($advert);
     }
 
     // On déclenche l'enregistrement de toutes les catégories
-    $manager->flush();
+    //     $manager->flush();
   }
 }
