@@ -102,7 +102,7 @@ assetic:
     debug:          '%kernel.debug%'	
     use_controller: '%kernel.debug%'
     bundles:
-        - WebProfilerBundle
+#        - WebProfilerBundle
         - OCPlatformBundle
         - AmineBundle
         - EasyAdminBundle
