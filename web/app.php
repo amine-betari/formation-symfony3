@@ -9,7 +9,7 @@ $loader = require __DIR__.'/../app/autoload.php';
 include_once __DIR__.'/../var/bootstrap.php.cache';
 
 $kernel = new AppKernel('prod', true);
-$kernel->loadClassCache();
+// $kernel->loadClassCache();
 // Un noyau cache pré-configuré (AppCache)
 $kernel = new AppCache($kernel);
 
