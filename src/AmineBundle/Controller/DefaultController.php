@@ -34,8 +34,8 @@ class DefaultController extends Controller
 		$listCategories = $repository->findAll();
 		$response = $this->render('AmineBundle:Default:index.html.twig', array('listCategories' => $listCategories));
 		// model cache expiration
-		$response->setSharedMaxAge(180);
-		$response->setPublic();
+		//$response->setSharedMaxAge(180);
+		//$response->setPublic();
 		return $response;
     }
 	
@@ -73,10 +73,10 @@ class DefaultController extends Controller
 		$listPages = $repository->findBy(array('isMenu' => true),array(), $limit, 0);
 		$response = $this->render('AmineBundle:Default:header.html.twig', array('listPages' => $listPages));
 		// cache for 60 seconds
-		$response->setSharedMaxAge(60);
+		// $response->setSharedMaxAge(60);
 				// (optional) set a custom Cache-Control directive
 				// $response->headers->addCacheControlDirective('must-revalidate', true);
-		$response->setEtag(md5(time()));
+		// $response->setEtag(md5(time()));
 		//if( $response->isNotModified($request) ) 
 		return  $response;
 	
@@ -96,12 +96,12 @@ class DefaultController extends Controller
 
 		$response = $this->render('AmineBundle:Default:page.html.twig', array('page' => $page));
 		// cache for 3600 seconds
-	    $response->setSharedMaxAge(3600);
+	   	// $response->setSharedMaxAge(3600);
 
-      	// (optional) set a custom Cache-Control directive
-	    $response->headers->addCacheControlDirective('must-revalidate', true);
+	      	// (optional) set a custom Cache-Control directive
+		//    $response->headers->addCacheControlDirective('must-revalidate', true);
 	        //  set one vary header
 		// $response->setVary('Accept-Encoding');
-       	return  $response;
+	       	return  $response;
 	}
 }
