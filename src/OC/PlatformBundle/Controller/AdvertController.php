@@ -283,11 +283,11 @@ class AdvertController extends Controller
 			));
 		// Model cache validation
 		
-		$response->setEtag(md5($advert->getDescriptif()));
-		$response->setSharedMaxAge(2);
-		$response->setLastModified($advert->getUpdatedAt());
-		$response->setPublic();
-		$response->isNotModified($request);
+		//$response->setEtag(md5($advert->getDescriptif()));
+		//$response->setSharedMaxAge(2);
+		//$response->setLastModified($advert->getUpdatedAt());
+		//$response->setPublic();
+		//$response->isNotModified($request);
 		return $response;
     }
 

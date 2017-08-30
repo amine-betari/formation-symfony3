@@ -56,8 +56,8 @@ class DefaultController extends Controller
 		}
 		
 		$response = $this->render('AmineBundle:Default:contact.html.twig', array('form' => $form->createView()));
-		$response->setPublic();
-		$response->setSharedMaxAge(86400);
+		//$response->setPublic();
+		//$response->setSharedMaxAge(86400);
 		return $response;
     }	
 
