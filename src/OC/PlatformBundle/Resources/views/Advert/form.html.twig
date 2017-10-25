@@ -108,6 +108,7 @@
 	
 
 	jQuery(document).ready(function() {
+
 		// hide somes lables
 		$('#advert_advertskilles').prev().hide();
 		$('#advert_categories').prev().hide();
@@ -123,7 +124,6 @@
 			FormDeleteLinkSkills($(this));
 		});
 		
-
 		// count the current form inputs we have (e.g. 2), use that as the new
 		// index when inserting a new item (e.g. 2)
 		$collectionHolder.data('index', $collectionHolder.find(':input').length);
@@ -202,12 +202,32 @@
 			var newForm = prototype.replace(/__name__/g, index);
 			// increase the index with one for the next item
 			$collectionHolder.data('index', index + 1);
+			
+			//nameInput =  $(newForm).find("select:last").attr('id') + '_skill';
+			//newForm = $(newForm).append('<label>New Skill</label><input type="text" id=\'' +nameInput+'\' name=\'' +nameInput+'\' />');
 		}
+		// test new skill dynamic
+		// selectLast = $(newForm).find("select:last");
+                // newFormDynamic = selectLast
+                  // .append($('<option>', {value : 'new', text: 'Add new skill or new zone de texte'}))
+                   // .on('change', function () {
+                     //        if ($( "select[id$=_skill] option:selected").val() === 'new') {
+                        //         console.log('you are good');
+                          //    }
+				//                    });
+		//		console.log(newFormDynamic.html());
+		// test = $(newForm).find("select:last").html(newFormDynamic);
+		
+		//	console.log(test.html());
+		//	$(newForm).find("select:last").replaceAll(test);
+        	// test dev end
 		// Display the form in the page in an li, before the "Add a tag" link li
 		var $newFormLi = $('<li></li>').append(newForm);
 		$newLinkLi.before($newFormLi);
 		FormDeleteLinkSkills($newFormLi);
 	}
+
+
 	function FormDeleteLinkSkills($tagFormLi) {
 		var $removeFormA = $('<a href="#"> Supprimer </a>');
 		$tagFormLi.append($removeFormA);
@@ -233,7 +253,7 @@ function addSecteurForm($collectionHolder, $newLinkLi) {
     // Display the form in the page in an li, before the "Add a tag" link li
     var $newFormLi = $('<li></li>').append(newForm);
     // also add a remove button, just for this example
-    $newFormLi.append('<a href="#" class="remove-sec">x</a>');
+    $newFormLi.append('<a href="#" class="remove-sec">Supprimer</a>');
     $newLinkLi.before($newFormLi);
     
     // handle the removal, just for this example

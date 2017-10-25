@@ -91,3 +91,6 @@ oc_platform_grid:
 oc_platform_admin_datatable:
     path: /advertlist
     defaults: { _controller: OCPlatformBundle:Advert:dataAdmin }
+oc_platform_search:
+    path: /search
+    defaults: { _controller: OCPlatformBundle:Advert:search }    

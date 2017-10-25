@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use OC\PlatformBundle\Entity\Application;
-use AmineBundle\File\FileUploader;
+use OC\PlatformBundle\File\FileUploader;
 use OC\PlatformBundle\Email\ApplicationMailer;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 

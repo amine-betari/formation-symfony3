@@ -32,7 +32,8 @@ class DefaultController extends Controller
 		// Get repositories 
 		$repository = $this->em->getRepository('OCPlatformBundle:Category');
 		$listCategories = $repository->findAll();
-		$response = $this->render('AmineBundle:Default:index.html.twig', array('listCategories' => $listCategories));
+		$response = $this->render('AmineBundle:Default:index.html.twig',
+            array('listCategories' => $listCategories));
 		// model cache expiration
 		//$response->setSharedMaxAge(180);
 		//$response->setPublic();
@@ -102,6 +103,6 @@ class DefaultController extends Controller
 		//    $response->headers->addCacheControlDirective('must-revalidate', true);
 	        //  set one vary header
 		// $response->setVary('Accept-Encoding');
-	       	return  $response;
+        return  $response;
 	}
 }

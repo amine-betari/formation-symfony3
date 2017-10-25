@@ -29,3 +29,25 @@ h2, h3, a, .val, .val-v1, .back-to-top, .lg-tabs li a:hover, .lg-tabs li.active 
   /*padding: 15px;*/
   width: auto;
 }
+.navbar__logo {
+  
+}
+@media (min-width: 768px){
+.navbar__logo {
+    padding-left: 10px;
+    width: 100%;
+    text-align: left;
+}
+.navbar-header{width:33%}
+.navbar-header div {margin-left: -75px;}
+.navbar__logo img {
+    top: 8px;
+    width:292%
+}
+}
+@media only screen and (max-width: 768px) {
+	.navbar-header{width:auto}
+	.navbar__logo	{    float: right;
+    margin-right: -16%;
+    margin-top: -11%;}
+}	

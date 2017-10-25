@@ -436,6 +436,19 @@ class AdvertController extends Controller
 		return $this->render('OCPlatformBundle:Advert:menu.html.twig', array('listAdverts' => $listAdverts));
     }
 	
+	public function searchAction(Request $request){
+		
+		$term = $request->query->get("term");
+		$doctrine = $this->get('doctrine');
+		$em = $doctrine->getManager();
+		$repository = $em->getRepository('OCPlatformBundle:Advert');
+		$results = $repository->search($term);
+		
+		return $this->render('OCPlatformBundle:Advert:search.html.twig', array('results' => $results));
+		
+		 return new Response(1);
+	}
+	
 	public function menuRecruteurAction($limit)
 	{
 		// Get service Doctrine

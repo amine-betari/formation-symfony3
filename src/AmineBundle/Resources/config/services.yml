@@ -1,4 +1,0 @@
-services:
-    oc_platform.brochure_uploader:
-        class: AmineBundle\File\FileUploader
-        arguments: ['%brochures_directory%']

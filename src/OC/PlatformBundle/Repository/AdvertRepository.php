@@ -125,5 +125,20 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
 		//$qb->where($qb->expr()->in('cat.name', $categoryName));
 		return $qb->getQuery()->getResult();
 	}
+	
+	public function search($term)
+    {
+	  //  if (!empty($term)) {
+            $qb = $this->createQueryBuilder('a');
+            $qb->where('a.title like :term')->setParameter('term', '%'.$term.'%')
+                //->orWhere('a.descriptif like :term')->setParameter('term', $term)
+                ->orderBy('a.date', 'DESC');
+            return $qb->getQuery()->getResult();
+      //  }
+
+
+		
+		
+	}
 
 }

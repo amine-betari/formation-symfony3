@@ -55,9 +55,9 @@ services:
         class: OC\PlatformBundle\ParamConverter\JsonParamConverter
         tags:
             - { name: request.param_converter }
-    # oc_platform.brochure_uploader:
-        # class: OC\PlatformBundle\File\FileUploader
-        # arguments: ['%brochures_directory%']
+    oc_platform.brochure_uploader:
+        class: OC\PlatformBundle\File\FileUploader
+        arguments: ['%brochures_directory%']
     oc_platform.doctrine_application_creation:
         class: OC\PlatformBundle\EventListener\ApplicationCreationListener
         arguments: 
