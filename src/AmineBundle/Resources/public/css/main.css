@@ -45,9 +45,32 @@ h2, h3, a, .val, .val-v1, .back-to-top, .lg-tabs li a:hover, .lg-tabs li.active 
     width:292%
 }
 }
-@media only screen and (max-width: 768px) {
+/*@media only screen and (max-width: 768px) {
 	.navbar-header{width:auto}
 	.navbar__logo	{    float: right;
     margin-right: -16%;
     margin-top: -11%;}
+}*/	
+
+
+@media only screen and (max-width: 768px) {
+	.navbar-header{width:auto}
+	.navbar__logo	{
+		float: none;
+		margin-right: 0;
+		text-align: left;
+		margin-top: 0;
+		margin-left: -73px;
+    }
+    .navbar-header .col-md-4{
+    	width: 50%;
+    }
+    .navbar-header .col-md-4 img{
+    	max-width: 100%;
+    }
 }	
+@media only screen and (max-width: 375px) {
+	.navbar__logo	{
+		margin-left: -41px;
+	}
+}
